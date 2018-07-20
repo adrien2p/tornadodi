@@ -9,8 +9,10 @@
     "^.+\\.ts?$": "ts-jest"
   },
   "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+  "roots": ["src"],
   "collectCoverageFrom" : [
     "src/**/*.{js,jsx,tsx,ts}",
+    "!dist/**",
     "!**/node_modules/**"
   ],
   "coverageReporters": ["json", "lcov"]

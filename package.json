@@ -1,0 +1,56 @@
+{
+  "name": "tornadoJS",
+  "version": "1.0.0",
+  "description": "Easiest dependency injection system",
+  "main": "dist/index.js",
+  "keywords": [
+    "DI",
+    "Dependencies",
+    "Dependency Injection",
+    "Lite Dependency Injection",
+    "Standalone DI",
+    "Standalone Dependency Injection",
+    "TS DI",
+    "TS Dependency Injection",
+    "TypeScript Dependency Injection",
+    "JS DI",
+    "JS Dependency Injection",
+    "Javascript Dependency Injection",
+    "DIY",
+    "Dependency Injectio Yourself"
+  ],
+  "scripts": {
+    "format": "prettier src/**/*.ts --write",
+    "build": "rm -rf dist && tsc -p tsconfig.json",
+    "test": "jest --config=jest.json",
+    "test:cov": "jest --config=jest.json --coverage --coverageDirectory=coverage && cat ./coverage/lcov.info | coveralls",
+    "prepublish:npm": "npm run format && npm run build && npm run test",
+    "publish:npm": "npm publish --access public",
+    "publish-please": "publish-please",
+    "prepublishOnly": "publish-please guard"
+  },
+  "author": {
+    "name": "Adrien de Peretti",
+    "email": "adrien.deperetti.freelance@gmail.com"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^23.1.5",
+    "@types/reflect-metadata": "^0.1.0",
+    "coveralls": "^3.0.2",
+    "jest": "^23.3.0",
+    "prettier": "^1.13.7",
+    "publish-please": "^3.2.0",
+    "reflect-metadata": "^0.1.12",
+    "ts-jest": "^23.0.0",
+    "typescript": "^2.9.2"
+  },
+  "peerDependencies": {
+    "@types/reflect-metadata": "^0.1.0",
+    "reflect-metadata": "^0.1.12"
+  },
+  "dependencies": {
+    "@types/winston": "^2.3.9",
+    "winston": "^3.0.0"
+  }
+}

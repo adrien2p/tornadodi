@@ -67,3 +67,4 @@ example
 gulpfile.js
 .prettierrc
 .travis.yml
+.publishrc
