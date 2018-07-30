@@ -17,16 +17,12 @@ export class Provider<T> {
 		this.token = typeof provider === 'function' ? provider.name : provider.token;
 		this.type = typeof provider === 'function' ? provider : provider.type;
 		this.instance = null;
-		this.isResolved = false;
+		this.$$resolved = false;
 		this.isSingleton = options ? options.isSingleton : false;
 	}
 
 	get isResolved(): boolean {
 		return this.$$resolved;
-	}
-
-	set isResolved(value: boolean) {
-		this.$$resolved = value;
 	}
 
 	static getToken(tokenOrType: string | (new (...args: any[]) => any)): string {
@@ -36,7 +32,7 @@ export class Provider<T> {
 
 	public resolve(providerContainer: ProviderContainer): Provider<T> {
 		const { token, type: ClassProvider } = this;
-		if (this.isResolved && this.isSingleton) return providerContainer.get(token);
+		if (this.$$resolved && this.isSingleton) return providerContainer.get(token);
 
 		const params = Reflect.getMetadata(PARAMTYPES_METADATA, ClassProvider) || [];
 		const injectedParams = Reflect.getMetadata(SELF_PARAMTYPES, ClassProvider) || [];
@@ -48,14 +44,14 @@ export class Provider<T> {
 			);
 			const resolvedParams = params.map((param: string | Function) => {
 				const provider = providerContainer.get(typeof param === 'string' ? param : param.name);
-				return provider.isResolved && provider.isSingleton
+				return provider.$$resolved && provider.isSingleton
 					? provider.instance
 					: provider.resolve(providerContainer).instance;
 			});
 			this.instance = new ClassProvider(...resolvedParams);
 		}
 
-		this.isResolved = true;
+		this.$$resolved = true;
 		providerContainer.updateProvider(this);
 		return this;
 	}
