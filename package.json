@@ -21,7 +21,7 @@
   ],
   "scripts": {
     "format": "prettier src/**/*.ts --write",
-    "build": "rm -rf dist && tsc -p tsconfig.json",
+    "build": "rm -rf dist && npm run format && tsc -p tsconfig.json",
     "test": "jest --config=jest.json",
     "test:cov": "jest --config=jest.json --coverage --coverageDirectory=coverage && cat ./coverage/lcov.info | coveralls",
     "prepublish:npm": "npm run format && npm run build && npm run test",
