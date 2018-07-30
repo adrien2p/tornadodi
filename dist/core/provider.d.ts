@@ -10,7 +10,7 @@ export declare class Provider<T> {
     constructor(provider: TokenTypeProvider<T> | (new (...args: any[]) => T), options?: {
         isSingleton: boolean;
     });
-    isResolved: boolean;
+    readonly isResolved: boolean;
     static getToken(tokenOrType: string | (new (...args: any[]) => any)): string;
     resolve(providerContainer: ProviderContainer): Provider<T>;
 }
