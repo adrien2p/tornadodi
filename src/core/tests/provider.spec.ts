@@ -5,16 +5,27 @@ import { ProviderContainer } from "../provider-container";
 
 describe("Provider", () => {
     @Injectable()
+    class Bar {
+        public method1(): string {
+            return 'method1 was called from Foo';
+        }
+    }
+
+    @Injectable()
     class Foo {
+        constructor(private bar: Bar) { }
+
         public method1(): string {
             return 'method1 was called from Foo';
         }
     }
 
     test('should allow to get string token from token of type', () => {
-        const token = Provider.getToken(Foo);
+        const fooToken = Provider.getToken(Foo);
+        const barToken = Provider.getToken(Bar);
 
-        expect(token).toBe('Foo');
+        expect(fooToken).toBe('Foo');
+        expect(barToken).toBe('Bar');
     });
 
    test('should allow to create a new provider as non singleton', () => {
@@ -39,10 +50,11 @@ describe("Provider", () => {
 
     test('should allow to resolve a provider', () => {
         const container = new ProviderContainer();
+        container.register([Foo, Bar]);
         const provider = new Provider({ token: 'Foo', type: Foo });
         provider.resolve(container);
 
-        expect(provider.instance).toEqual(new Foo());
+        expect(provider.instance).toEqual(new Foo(new Bar()));
         expect(provider.isResolved).toBe(true);
     });
 });

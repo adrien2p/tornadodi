@@ -116,4 +116,8 @@ describe("Tornado", () => {
             expect(tornado.resolve<Bar>('bar').method1()).toBe('method1 was called from Bar');
         });
     });
+
+    it('should return the container size', () => {
+        expect(Tornado.getContainerSize()).toBe(4);
+    })
 });
