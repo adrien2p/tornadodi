@@ -1,5 +1,5 @@
 <p align="center">
-  ![TornadoJS](./docs/assets/logo-text-medium.png)
+  <img atl="tornadojs" src="./docs/assets/logo-text-medium.png"/>
 </p>
 
 # TornadoJS
