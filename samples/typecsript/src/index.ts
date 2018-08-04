@@ -1,6 +1,6 @@
 import { BarService } from "./bar.service";
 import { FooService } from "./foo.service";
-import { Tornado } from "tornadojs";
+import { Tornado } from "tornadodi";
 
 const bootstrap = function() {
     Tornado.register([FooService, BarService]);

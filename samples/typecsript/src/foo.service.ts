@@ -1,5 +1,5 @@
 import { BarService } from './bar.service';
-import { Dependencies, Injectable } from "tornadojs";
+import { Dependencies, Injectable } from "tornadodi";
 
 @Injectable()
 @Dependencies(BarService)

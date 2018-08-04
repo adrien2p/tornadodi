@@ -1,15 +1,15 @@
 <p align="center">
-  <img atl="tornadojs" src="./docs/assets/logo-text-medium.png"/>
+  <img atl="TornadoDI" src="./docs/assets/tornadoDI.png"/>
 </p>
 
-# TornadoJS
+# TornadoDI
 
-> TornadoJS provide a modern lite way to deal with dependency injection into your Typescript or javascript project
+> TornadoDI provide a modern lite way to deal with dependency injection into your Typescript or javascript project
 
-[![Build Status](https://travis-ci.org/adrien2p/tornadojs.svg?branch=master)](https://travis-ci.org/adrien2p/tornadojs)
-[![Coverage Status](https://coveralls.io/repos/github/adrien2p/tornadojs/badge.svg?branch=master)](https://coveralls.io/github/adrien2p/tornadojs?branch=master)
-[![GitHub license](https://img.shields.io/github/license/adrien2p/tornadojs.svg)](https://github.com/adrien2p/tornadojs/blob/master/LICENSE)
-[![GitHub release](https://img.shields.io/github/release/adrien2p/tornadojs.svg)](https://GitHub.com/adrien2p/tornadojs/releases/)
+[![Build Status](https://travis-ci.org/adrien2p/TornadoDI.svg?branch=master)](https://travis-ci.org/adrien2p/TornadoDI)
+[![Coverage Status](https://coveralls.io/repos/github/adrien2p/TornadoDI/badge.svg?branch=master)](https://coveralls.io/github/adrien2p/TornadoDI?branch=master)
+[![GitHub license](https://img.shields.io/github/license/adrien2p/TornadoDI.svg)](https://github.com/adrien2p/TornadoDI/blob/master/LICENSE)
+[![GitHub release](https://img.shields.io/github/release/adrien2p/TornadoDI.svg)](https://GitHub.com/adrien2p/TornadoDI/releases/)
 
 ## Table of Contents 
 
@@ -30,7 +30,7 @@
 
 ## Prerequisites
 
-In order to be able to use `TornadoJS` into your project, you will have to install two libraries.
+In order to be able to use `TornadoDI` into your project, you will have to install two libraries.
 
 ```text
 npm i reflect-metadata @types/reflect-metadata
@@ -55,31 +55,31 @@ and configure your `.babelrs` as the following
 
 ## Installation
 
-To use `TornadoJS` you have to install the library first.
+To use `TornadoDI` you have to install the library first.
 
 ```text
-npm i tornadojs
+npm i TornadoDI
 ```
 
 ## Features
   
 ### Decorators
 
-To free the power of `TornadoJS` some decorators are provided in order to rich the purpose of the dependency injection.
+To free the power of `TornadoDI` some decorators are provided in order to rich the purpose of the dependency injection.
 
 #### @Injectable()
 
-The `@Injectable()` decorator is the more important one, it is through this decorator than `TornadoJS` will
+The `@Injectable()` decorator is the more important one, it is through this decorator than `TornadoDI` will
 be able to know about what as to be injected in the class to resolve.
 
 ```typescript
-import { Injectable } from 'tornadojs';
+import { Injectable } from 'TornadoDI';
 
 @Injetable()
 export class Foo { } 
 ```
 ```javascript
-const Injectable = require('tornadojs').Injectable;
+const Injectable = require('TornadoDI').Injectable;
 
 @Injetable()
 class Foo { }
@@ -93,7 +93,7 @@ The `@Inject()` decorator will allow you to specify a token or a class to be inj
 To specify a token during the registration, refer you to the following section [Register a class](#register-a-class)
 
 ```typescript
-import { Injectable, Inject } from 'tornadojs';
+import { Injectable, Inject } from 'TornadoDI';
 
 @Injetable()
 export class Foo { 
@@ -101,8 +101,8 @@ export class Foo {
 } 
 ```
 ```javascript
-const Injectable = require('tornadojs').Injectable;
-const Dependencies = require('tornadojs').Dependencies;
+const Injectable = require('TornadoDI').Injectable;
+const Dependencies = require('TornadoDI').Dependencies;
 
 @Injetable()
 @Dependencies('barToken')
@@ -118,12 +118,12 @@ module.exports = Foo;
 #### @Dependencies()
 
 In javascript you will not be able to emit `design:paramtypes` metadata from a class. In order to be able to specify the injection
-you can use the `@Dependencies()` decorator which will be able to populate this specific metadata and allow `TornadoJS`
+you can use the `@Dependencies()` decorator which will be able to populate this specific metadata and allow `TornadoDI`
 to deal with the injection.
 
 ```javascript
-const Injectable = require('tornadojs').Injectable;
-const Dependencies = require('tornadojs').Dependencies;
+const Injectable = require('TornadoDI').Injectable;
+const Dependencies = require('TornadoDI').Dependencies;
 
 @Injetable()
 @Dependencies('barToken')
@@ -138,7 +138,7 @@ module.exports = Foo;
 
 ### Registering and resolving
 
-During the time you are using `TornadoJS` you will be able to register any class at any time and resolve them
+During the time you are using `TornadoDI` you will be able to register any class at any time and resolve them
 when you want. The resolution is made only when it is asked for and never during the registration for performance
 purpose.
 
@@ -160,7 +160,7 @@ To use this methods see the following example.
 // Typescript
 import Bar from './bar.service';
 import Foo from './foo.service';
-import { tornado } from 'tornadojs';
+import { tornado } from 'TornadoDI';
 
 const bootstrap = () => {
     // Registering the two class.
@@ -173,7 +173,7 @@ bootstrap();
 // Javascript
 const Bar = require('./bar.service');
 const Foo = require('./foo.service');
-const tornado = require('tornadojs').tornado;
+const tornado = require('TornadoDI').tornado;
 
 const bootstrap = () => {
     // Registering the two class.
@@ -197,7 +197,7 @@ To use this methods see the following example.
 // Typescript
 import Bar from './bar.service';
 import Foo from './foo.service';
-import { tornado } from 'tornadojs';
+import { tornado } from 'TornadoDI';
 
 const bootstrap = () => {
     // Registering the two class.
@@ -209,7 +209,7 @@ bootstrap();
 // Javascript
 const Bar = require('./bar.service');
 const Foo = require('./foo.service');
-const tornado = require('tornadojs').tornado;
+const tornado = require('TornadoDI').tornado;
 
 const bootstrap = () => {
     // Registering the two class.
@@ -233,7 +233,7 @@ same instance as the previous one. See the following example.
 // Typescript
 import Bar from './bar.service';
 import Foo from './foo.service';
-import { tornado } from 'tornadojs';
+import { tornado } from 'TornadoDI';
 
 const bootstrap = () => {
     tornado.register([Foo, Bar]);
@@ -247,7 +247,7 @@ bootstrap();
 // Javascript
 const Bar = require('./bar.service');
 const Foo = require('./foo.service');
-const tornado = require('tornadojs').tornado;
+const tornado = require('TornadoDI').tornado;
 
 const bootstrap = () => {
     tornado.register([Foo, Bar]);
@@ -264,7 +264,7 @@ bootstrap();
 // Typescript
 import Bar from './bar.service';
 import Foo from './foo.service';
-import { tornado } from 'tornadojs';
+import { tornado } from 'TornadoDI';
 
 const bootstrap = () => {
     tornado.register([{ token: 'foo', type: Foo }, Bar]);
@@ -278,7 +278,7 @@ bootstrap();
 // Javascript
 const Bar = require('./bar.service');
 const Foo = require('./foo.service');
-const tornado = require('tornadojs').tornado;
+const tornado = require('TornadoDI').tornado;
 
 const bootstrap = () => {
     tornado.register([{ token: 'foo', type: Foo }, Bar]);
@@ -291,14 +291,14 @@ bootstrap();
 
 ### Clear the container
 
-`TornadoJS` as it's own container, which is not accessible to the user natively. If you want at any time
+`TornadoDI` as it's own container, which is not accessible to the user natively. If you want at any time
 clear all the dependencies registered into the container, you can call the `clear` method as the following example.
 
 ```typescript
 // Typescript
 import Bar from './bar.service';
 import Foo from './foo.service';
-import { tornado } from 'tornadojs';
+import { tornado } from 'TornadoDI';
 
 const bootstrap = () => {
     tornado.register([{ token: 'foo', type: Foo }, Bar]);
@@ -316,7 +316,7 @@ bootstrap();
 // Javascript
 const Bar = require('./bar.service');
 const Foo = require('./foo.service');
-const tornado = require('tornadojs').tornado;
+const tornado = require('TornadoDI').tornado;
 
 const bootstrap = () => {
     tornado.register([{ token: 'foo', type: Foo }, Bar]);

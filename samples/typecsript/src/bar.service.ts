@@ -1,4 +1,4 @@
-import { Injectable } from "tornadojs";
+import { Injectable } from "tornadodi";
 
 @Injectable()
 export class BarService {
