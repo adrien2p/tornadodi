@@ -1,6 +1,6 @@
 {
   "name": "tornadojs",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Easiest dependency injection system",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -25,10 +25,8 @@
     "build": "rm -rf dist && npm run format && tsc -p tsconfig.json",
     "test": "jest --config=jest.json",
     "test:cov": "jest --config=jest.json --coverage --coverageDirectory=coverage && cat ./coverage/lcov.info | coveralls",
-    "prepublish:npm": "npm run format && npm run build && npm run test",
-    "publish:npm": "npm publish --access public",
-    "publish-please": "publish-please",
-    "prepublishOnly": "publish-please guard"
+    "prepublish:npm": "npm run build && npm run test",
+    "publish:npm": "npm publish --public"
   },
   "author": {
     "name": "Adrien de Peretti",
@@ -41,7 +39,6 @@
     "coveralls": "^3.0.2",
     "jest": "^23.3.0",
     "prettier": "^1.13.7",
-    "publish-please": "^3.2.0",
     "reflect-metadata": "^0.1.12",
     "ts-jest": "^23.0.0",
     "typescript": "^2.9.2"

@@ -11,5 +11,5 @@
   "publishCommand": "npm run publish:npm",
   "publishTag": "latest",
   "prePublishScript": "npm run prepublish:npm",
-  "postPublishScript": ""
+  "postPublishScript": false
 }
