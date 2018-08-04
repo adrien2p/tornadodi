@@ -1,5 +1,5 @@
 {
-  "name": "tornadoDI",
+  "name": "tornadodi",
   "version": "1.0.5",
   "description": "Easiest dependency injection system",
   "main": "dist/index.js",
