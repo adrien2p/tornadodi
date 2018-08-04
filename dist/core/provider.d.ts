@@ -7,7 +7,7 @@ export declare class Provider<T> {
     instance: T;
     isSingleton: boolean;
     private $$resolved;
-    constructor(provider: TokenTypeProvider<T> | (new (...args: any[]) => T), options?: {
+    constructor(rawProvider: TokenTypeProvider<T> | (new (...args: any[]) => T), options?: {
         isSingleton: boolean;
     });
     readonly isResolved: boolean;

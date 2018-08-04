@@ -1,8 +1,9 @@
 {
-  "name": "tornadoJS",
+  "name": "tornadojs",
   "version": "1.0.0",
   "description": "Easiest dependency injection system",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "keywords": [
     "DI",
     "Dependencies",

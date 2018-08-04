@@ -7,7 +7,6 @@ class TornadoStatic {
 	private providerContainer: ProviderContainer = new ProviderContainer();
 
 	@Log({
-		level: 'info',
 		message: injectedParameters => {
 			const rawProviders = !Array.isArray(injectedParameters[0])
 				? [injectedParameters[0]]
@@ -20,7 +19,7 @@ class TornadoStatic {
 		rawProviders:
 			| TokenTypeProvider<T>
 			| (new (...args: any[]) => T)
-			| (TokenTypeProvider<T> | (new (...args: any[]) => T))[],
+			| (TokenTypeProvider<T> | (new (...args: any[]) => T))[]
 	): this {
 		rawProviders = !Array.isArray(rawProviders) ? [rawProviders] : rawProviders;
 		this.providerContainer.register<T>(rawProviders, { isSingleton: true });
@@ -28,7 +27,6 @@ class TornadoStatic {
 	}
 
 	@Log({
-		level: 'info',
 		message: injectedParameters => {
 			const rawProviders = !Array.isArray(injectedParameters[0])
 				? [injectedParameters[0]]
@@ -41,7 +39,7 @@ class TornadoStatic {
 		rawProviders:
 			| TokenTypeProvider<T>
 			| (new (...args: any[]) => T)
-			| (TokenTypeProvider<T> | (new (...args: any[]) => T))[],
+			| (TokenTypeProvider<T> | (new (...args: any[]) => T))[]
 	): this {
 		rawProviders = !Array.isArray(rawProviders) ? [rawProviders] : rawProviders;
 		this.providerContainer.register<T>(rawProviders);
@@ -49,7 +47,6 @@ class TornadoStatic {
 	}
 
 	@Log({
-		level: 'info',
 		message: injectedParameters => {
 			const token = Provider.getToken(injectedParameters[0]);
 			return `[${token}] provider have been resolved`;

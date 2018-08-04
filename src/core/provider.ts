@@ -11,11 +11,11 @@ export class Provider<T> {
 	private $$resolved: boolean;
 
 	constructor(
-		provider: TokenTypeProvider<T> | (new (...args: any[]) => T),
-		options?: { isSingleton: boolean },
+		rawProvider: TokenTypeProvider<T> | (new (...args: any[]) => T),
+		options?: { isSingleton: boolean }
 	) {
-		this.token = typeof provider === 'function' ? provider.name : provider.token;
-		this.type = typeof provider === 'function' ? provider : provider.type;
+		this.token = typeof rawProvider === 'function' ? rawProvider.name : rawProvider.token;
+		this.type = typeof rawProvider === 'function' ? rawProvider : rawProvider.type;
 		this.instance = null;
 		this.$$resolved = false;
 		this.isSingleton = options ? options.isSingleton : false;
@@ -40,10 +40,11 @@ export class Provider<T> {
 			this.instance = new ClassProvider();
 		} else {
 			injectedParams.map(
-				(p: { index: number; tokenOrType: string | Function }) => (params[p.index] = p.tokenOrType),
+				(p: { index: number; tokenOrType: string | (new (...args: any[]) => any) }) =>
+					(params[p.index] = p.tokenOrType)
 			);
-			const resolvedParams = params.map((param: string | Function) => {
-				const provider = providerContainer.get(typeof param === 'string' ? param : param.name);
+			const resolvedParams = params.map((param: string | (new (...args: any[]) => any)) => {
+				const provider = providerContainer.get(Provider.getToken(param));
 				return provider.$$resolved && provider.isSingleton
 					? provider.instance
 					: provider.resolve(providerContainer).instance;

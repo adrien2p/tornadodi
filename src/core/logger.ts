@@ -16,7 +16,7 @@ export class Logger {
 							return `${info.timestamp} [${this.$$context.className}] ${info.level} ${
 								info.message
 							}`;
-						}),
+						})
 					),
 				}),
 			],
@@ -25,7 +25,6 @@ export class Logger {
 
 	zone(originalMethodArgs: any[], callback: () => any, options: LoggerZoneOptions): any {
 		options = {
-			level: 'info',
 			showElapsedTime: true,
 			injectOriginalMethodArgs: false,
 			...options,
@@ -44,13 +43,7 @@ export class Logger {
 				: message;
 		message += formattedElapsedTime;
 
-		if (options.level === 'info') {
-			this.winstonLogger.info(message);
-		} else if (options.level === 'error') {
-			this.winstonLogger.error(message);
-		} else if (options.level === 'warning') {
-			this.winstonLogger.warning(message);
-		}
+		this.winstonLogger.info(message);
 
 		return callbackResult;
 	}

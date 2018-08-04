@@ -1,0 +1,25 @@
+{
+  "name": "tornadojs-javascript-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "babel src --out-dir dist",
+    "start": "npm run build && node dist/index.js"
+  },
+  "author": {
+    "name": "Adrien de Peretti",
+    "email": "adrien.deperetti.freelance@gmail.com"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "tornadojs": "^1.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0-beta.56",
+    "@babel/core": "^7.0.0-beta.56",
+    "@babel/plugin-proposal-decorators": "^7.0.0-beta.56",
+    "@babel/preset-env": "^7.0.0-beta.56",
+    "reflect-metadata": "^0.1.12"
+  }
+}

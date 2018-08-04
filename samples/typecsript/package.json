@@ -1,0 +1,20 @@
+{
+  "name": "tornadojs-javascript-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "tsc && node dist/index.js"
+  },
+  "author": {
+    "name": "Adrien de Peretti",
+    "email": "adrien.deperetti.freelance@gmail.com"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "tornadojs": "^1.0.0"
+  },
+  "devDependencies": {
+    "reflect-metadata": "^0.1.12"
+  }
+}

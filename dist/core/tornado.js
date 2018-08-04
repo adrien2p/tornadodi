@@ -41,7 +41,6 @@ class TornadoStatic {
 }
 __decorate([
     log_decorator_1.Log({
-        level: 'info',
         message: injectedParameters => {
             const rawProviders = !Array.isArray(injectedParameters[0])
                 ? [injectedParameters[0]]
@@ -56,7 +55,6 @@ __decorate([
 ], TornadoStatic.prototype, "registerAsSingleton", null);
 __decorate([
     log_decorator_1.Log({
-        level: 'info',
         message: injectedParameters => {
             const rawProviders = !Array.isArray(injectedParameters[0])
                 ? [injectedParameters[0]]
@@ -71,7 +69,6 @@ __decorate([
 ], TornadoStatic.prototype, "register", null);
 __decorate([
     log_decorator_1.Log({
-        level: 'info',
         message: injectedParameters => {
             const token = provider_1.Provider.getToken(injectedParameters[0]);
             return `[${token}] provider have been resolved`;

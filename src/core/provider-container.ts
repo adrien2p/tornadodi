@@ -10,7 +10,7 @@ export class ProviderContainer {
 
 	public register<T>(
 		rawProviders: (TokenTypeProvider<T> | (new (...args: any[]) => T))[],
-		options?: { isSingleton: boolean },
+		options?: { isSingleton: boolean }
 	): { count: number } {
 		for (const rawProvider of rawProviders) {
 			const provider = new Provider<T>(rawProvider, options);

@@ -22,7 +22,7 @@ class Logger {
         });
     }
     zone(originalMethodArgs, callback, options) {
-        options = Object.assign({ level: 'info', showElapsedTime: true, injectOriginalMethodArgs: false }, options);
+        options = Object.assign({ showElapsedTime: true, injectOriginalMethodArgs: false }, options);
         let startAt = new Date();
         const callbackResult = callback();
         if (!options.showElapsedTime)
@@ -34,15 +34,7 @@ class Logger {
                 ? message(options.injectOriginalMethodArgs ? originalMethodArgs : null)
                 : message;
         message += formattedElapsedTime;
-        if (options.level === 'info') {
-            this.winstonLogger.info(message);
-        }
-        else if (options.level === 'error') {
-            this.winstonLogger.error(message);
-        }
-        else if (options.level === 'warning') {
-            this.winstonLogger.warning(message);
-        }
+        this.winstonLogger.info(message);
         return callbackResult;
     }
     getFormattedElapsedTime(start, end) {

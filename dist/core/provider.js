@@ -3,9 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 const metadata_constant_1 = require("../constants/metadata.constant");
 class Provider {
-    constructor(provider, options) {
-        this.token = typeof provider === 'function' ? provider.name : provider.token;
-        this.type = typeof provider === 'function' ? provider : provider.type;
+    constructor(rawProvider, options) {
+        this.token = typeof rawProvider === 'function' ? rawProvider.name : rawProvider.token;
+        this.type = typeof rawProvider === 'function' ? rawProvider : rawProvider.type;
         this.instance = null;
         this.$$resolved = false;
         this.isSingleton = options ? options.isSingleton : false;
@@ -30,7 +30,7 @@ class Provider {
         else {
             injectedParams.map((p) => (params[p.index] = p.tokenOrType));
             const resolvedParams = params.map((param) => {
-                const provider = providerContainer.get(typeof param === 'string' ? param : param.name);
+                const provider = providerContainer.get(Provider.getToken(param));
                 return provider.$$resolved && provider.isSingleton
                     ? provider.instance
                     : provider.resolve(providerContainer).instance;
