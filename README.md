@@ -6,9 +6,9 @@
 
 > TornadoDI provide a modern lite way to deal with dependency injection into your Typescript or javascript project
 
-[![Build Status](https://travis-ci.org/adrien2p/tornadojs.svg?branch=master)](https://travis-ci.org/adrien2p/tornadojs)
-[![Coverage Status](https://coveralls.io/repos/github/adrien2p/tornadojs/badge.svg?branch=master)](https://coveralls.io/github/adrien2p/tornadojs?branch=master)
-[![GitHub license](https://img.shields.io/github/license/adrien2p/tornadojs.svg)](https://github.com/adrien2p/tornadojs/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/adrien2p/tornadodi.svg?branch=master)](https://travis-ci.org/adrien2p/tornadodi)
+[![Coverage Status](https://coveralls.io/repos/github/adrien2p/tornadodi/badge.svg?branch=master)](https://coveralls.io/github/adrien2p/tornadodi?branch=master)
+[![GitHub license](https://img.shields.io/github/license/adrien2p/tornadodi.svg)](https://github.com/adrien2p/tornadodi/blob/master/LICENSE)
 [![npm version](https://badge.fury.io/js/tornadodi.svg)](https://badge.fury.io/js/tornadodi)
 
 ## Table of Contents 
@@ -42,7 +42,7 @@ If you are working on a javascript project, you have to install few `babel` plug
 npm i --save-dev @babel/cli @babel/core @babel/plugin-proposal-decorators @babel/preset-env
 ```
 
-and configure your `.babelrs` as the following
+and configure your `.babelrc` as the following
 
 ```text
 {
@@ -73,13 +73,15 @@ The `@Injectable()` decorator is the more important one, it is through this deco
 be able to know about what as to be injected in the class to resolve.
 
 ```typescript
-import { Injectable } from 'TornadoDI';
+// Typescript
+import { Injectable } form 'tornadodi';
 
 @Injetable()
 export class Foo { } 
 ```
 ```javascript
-const Injectable = require('TornadoDI').Injectable;
+// Javascript
+const Injectable = require('tornadodi').Injectable;
 
 @Injetable()
 class Foo { }
@@ -93,7 +95,8 @@ The `@Inject()` decorator will allow you to specify a token or a class to be inj
 To specify a token during the registration, refer you to the following section [Register a class](#register-a-class)
 
 ```typescript
-import { Injectable, Inject } from 'TornadoDI';
+// Typescript
+import { Injectable, Inject } form 'tornadodi';
 
 @Injetable()
 export class Foo { 
@@ -101,8 +104,9 @@ export class Foo {
 } 
 ```
 ```javascript
-const Injectable = require('TornadoDI').Injectable;
-const Dependencies = require('TornadoDI').Dependencies;
+// Javascript
+const Injectable = require('tornadodi').Injectable;
+const Dependencies = require('tornadodi').Dependencies;
 
 @Injetable()
 @Dependencies('barToken')
@@ -122,8 +126,9 @@ you can use the `@Dependencies()` decorator which will be able to populate this 
 to deal with the injection.
 
 ```javascript
-const Injectable = require('TornadoDI').Injectable;
-const Dependencies = require('TornadoDI').Dependencies;
+// Javascript
+const Injectable = require('tornadodi').Injectable;
+const Dependencies = require('tornadodi').Dependencies;
 
 @Injetable()
 @Dependencies('barToken')
@@ -160,7 +165,7 @@ To use this methods see the following example.
 // Typescript
 import Bar from './bar.service';
 import Foo from './foo.service';
-import { tornado } from 'TornadoDI';
+import { Tornado } form 'tornadodi';
 
 const bootstrap = () => {
     // Registering the two class.
@@ -173,7 +178,7 @@ bootstrap();
 // Javascript
 const Bar = require('./bar.service');
 const Foo = require('./foo.service');
-const tornado = require('TornadoDI').tornado;
+const tornado = require('tornadodi').tornado;
 
 const bootstrap = () => {
     // Registering the two class.
@@ -197,7 +202,7 @@ To use this methods see the following example.
 // Typescript
 import Bar from './bar.service';
 import Foo from './foo.service';
-import { tornado } from 'TornadoDI';
+import { Tornado } form 'tornadodi';
 
 const bootstrap = () => {
     // Registering the two class.
@@ -209,7 +214,7 @@ bootstrap();
 // Javascript
 const Bar = require('./bar.service');
 const Foo = require('./foo.service');
-const tornado = require('TornadoDI').tornado;
+const tornado = require('tornadodi').tornado;
 
 const bootstrap = () => {
     // Registering the two class.
@@ -233,7 +238,7 @@ same instance as the previous one. See the following example.
 // Typescript
 import Bar from './bar.service';
 import Foo from './foo.service';
-import { tornado } from 'TornadoDI';
+import { Tornado } form 'tornadodi';
 
 const bootstrap = () => {
     tornado.register([Foo, Bar]);
@@ -247,7 +252,7 @@ bootstrap();
 // Javascript
 const Bar = require('./bar.service');
 const Foo = require('./foo.service');
-const tornado = require('TornadoDI').tornado;
+const tornado = require('tornadodi').tornado;
 
 const bootstrap = () => {
     tornado.register([Foo, Bar]);
@@ -264,7 +269,7 @@ bootstrap();
 // Typescript
 import Bar from './bar.service';
 import Foo from './foo.service';
-import { tornado } from 'TornadoDI';
+import { Tornado } form 'tornadodi';
 
 const bootstrap = () => {
     tornado.register([{ token: 'foo', type: Foo }, Bar]);
@@ -278,7 +283,7 @@ bootstrap();
 // Javascript
 const Bar = require('./bar.service');
 const Foo = require('./foo.service');
-const tornado = require('TornadoDI').tornado;
+const tornado = require('tornadodi').tornado;
 
 const bootstrap = () => {
     tornado.register([{ token: 'foo', type: Foo }, Bar]);
@@ -298,7 +303,7 @@ clear all the dependencies registered into the container, you can call the `clea
 // Typescript
 import Bar from './bar.service';
 import Foo from './foo.service';
-import { tornado } from 'TornadoDI';
+import { Tornado } form 'tornadodi';
 
 const bootstrap = () => {
     tornado.register([{ token: 'foo', type: Foo }, Bar]);
@@ -316,7 +321,7 @@ bootstrap();
 // Javascript
 const Bar = require('./bar.service');
 const Foo = require('./foo.service');
-const tornado = require('TornadoDI').tornado;
+const tornado = require('tornadodi').tornado;
 
 const bootstrap = () => {
     tornado.register([{ token: 'foo', type: Foo }, Bar]);
