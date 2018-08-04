@@ -25,7 +25,6 @@
     "build": "rm -rf dist && npm run format && tsc -p tsconfig.json",
     "test": "jest --config=jest.json",
     "test:cov": "jest --config=jest.json --coverage --coverageDirectory=coverage && cat ./coverage/lcov.info | coveralls",
-    "prepublish:npm": "npm run format && npm run build && npm run test",
     "publish:npm": "npm publish --access public",
     "publish-please": "publish-please",
     "prepublishOnly": "publish-please guard"
