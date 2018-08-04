@@ -6,10 +6,10 @@
 
 > TornadoDI provide a modern lite way to deal with dependency injection into your Typescript or javascript project
 
-[![Build Status](https://travis-ci.org/adrien2p/TornadoDI.svg?branch=master)](https://travis-ci.org/adrien2p/TornadoDI)
-[![Coverage Status](https://coveralls.io/repos/github/adrien2p/TornadoDI/badge.svg?branch=master)](https://coveralls.io/github/adrien2p/TornadoDI?branch=master)
-[![GitHub license](https://img.shields.io/github/license/adrien2p/TornadoDI.svg)](https://github.com/adrien2p/TornadoDI/blob/master/LICENSE)
-[![GitHub release](https://img.shields.io/github/release/adrien2p/TornadoDI.svg)](https://GitHub.com/adrien2p/TornadoDI/releases/)
+[![Build Status](https://travis-ci.org/adrien2p/tornadojs.svg?branch=master)](https://travis-ci.org/adrien2p/tornadojs)
+[![Coverage Status](https://coveralls.io/repos/github/adrien2p/tornadojs/badge.svg?branch=master)](https://coveralls.io/github/adrien2p/tornadojs?branch=master)
+[![GitHub license](https://img.shields.io/github/license/adrien2p/tornadojs.svg)](https://github.com/adrien2p/tornadojs/blob/master/LICENSE)
+[![npm version](https://badge.fury.io/js/tornadodi.svg)](https://badge.fury.io/js/tornadodi)
 
 ## Table of Contents 
 

@@ -18,7 +18,9 @@
     "JS Dependency Injection",
     "Javascript Dependency Injection",
     "DIY",
-    "Dependency Injectio Yourself"
+    "Dependency Injectio Yourself",
+    "tornadoDI",
+    "tornadoDependencyInjection"
   ],
   "scripts": {
     "format": "prettier src/**/*.ts --write",
