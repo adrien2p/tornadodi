@@ -58,7 +58,7 @@ and configure your `.babelrs` as the following
 To use `TornadoDI` you have to install the library first.
 
 ```text
-npm i TornadoDI
+npm i tornadodi
 ```
 
 ## Features
