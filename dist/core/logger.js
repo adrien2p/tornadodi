@@ -21,24 +21,14 @@ class Logger {
             ],
         });
     }
-    zone(originalMethodArgs, callback, options) {
-        options = Object.assign({ showElapsedTime: true, injectOriginalMethodArgs: false }, options);
-        let startAt = new Date();
-        const callbackResult = callback();
-        if (!options.showElapsedTime)
-            return '';
-        const formattedElapsedTime = this.getFormattedElapsedTime(startAt, new Date());
-        let message = options.message;
-        message =
-            typeof message === 'function'
-                ? message(options.injectOriginalMethodArgs ? originalMethodArgs : null)
-                : message;
-        message += formattedElapsedTime;
-        this.winstonLogger.info(message);
-        return callbackResult;
-    }
-    getFormattedElapsedTime(start, end) {
-        return ` +${Math.abs(end.getTime() - start.getTime())}ms`;
+    catchError(callback) {
+        try {
+            return callback();
+        }
+        catch (e) {
+            this.winstonLogger.error(`${e.message}\n${e.stack}`);
+            throw new Error(e);
+        }
     }
 }
 exports.Logger = Logger;

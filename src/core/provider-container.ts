@@ -1,5 +1,5 @@
 import { Provider } from './provider';
-import { TokenTypeProvider } from './interfaces/token-type-provider.interface';
+import { TokenMetatypeRawProvider } from './interfaces/token-metatype-raw-provider.interface';
 
 export class ProviderContainer {
 	private container: Map<string, Provider<any>> = new Map();
@@ -9,7 +9,7 @@ export class ProviderContainer {
 	}
 
 	public register<T>(
-		rawProviders: (TokenTypeProvider<T> | (new (...args: any[]) => T))[],
+		rawProviders: (TokenMetatypeRawProvider<T> | (new (...args: any[]) => T))[],
 		options?: { isSingleton: boolean }
 	): { count: number } {
 		for (const rawProvider of rawProviders) {
@@ -23,8 +23,8 @@ export class ProviderContainer {
 		this.container.set(provider.token, provider);
 	}
 
-	public resolve<T>(tokenOrType: string | (new (...args: any[]) => T)): Provider<T> {
-		const token = Provider.getToken(tokenOrType);
+	public resolve<T>(tokenOrMetatype: string | (new (...args: any[]) => T)): Provider<T> {
+		const token = Provider.getToken(tokenOrMetatype);
 		return this.container.get(token).resolve(this);
 	}
 

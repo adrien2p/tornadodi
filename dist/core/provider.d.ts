@@ -1,16 +1,16 @@
 import 'reflect-metadata';
 import { ProviderContainer } from './provider-container';
-import { TokenTypeProvider } from './interfaces/token-type-provider.interface';
+import { TokenMetatypeRawProvider } from './interfaces/token-metatype-raw-provider.interface';
 export declare class Provider<T> {
     token: string;
-    type: new (...args: any[]) => T;
+    metatype: new (...args: any[]) => T;
     instance: T;
     isSingleton: boolean;
     private $$resolved;
-    constructor(rawProvider: TokenTypeProvider<T> | (new (...args: any[]) => T), options?: {
+    constructor(rawProvider: TokenMetatypeRawProvider<T> | (new (...args: any[]) => T), options?: {
         isSingleton: boolean;
     });
     readonly isResolved: boolean;
-    static getToken(tokenOrType: string | (new (...args: any[]) => any)): string;
+    static getToken(tokenOrMetatype: string | (new (...args: any[]) => any)): string;
     resolve(providerContainer: ProviderContainer): Provider<T>;
 }

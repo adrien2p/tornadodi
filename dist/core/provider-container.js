@@ -18,8 +18,8 @@ class ProviderContainer {
     updateProvider(provider) {
         this.container.set(provider.token, provider);
     }
-    resolve(tokenOrType) {
-        const token = provider_1.Provider.getToken(tokenOrType);
+    resolve(tokenOrMetatype) {
+        const token = provider_1.Provider.getToken(tokenOrMetatype);
         return this.container.get(token).resolve(this);
     }
     get(token) {

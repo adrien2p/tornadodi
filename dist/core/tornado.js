@@ -11,24 +11,31 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var _a;
 const provider_container_1 = require("./provider-container");
-const log_decorator_1 = require("../decorators/log.decorator");
-const provider_1 = require("./provider");
+const catch_error_decorator_1 = require("../decorators/catch-error.decorator");
 class TornadoStatic {
     constructor() {
         this.providerContainer = new provider_container_1.ProviderContainer();
     }
     registerAsSingleton(rawProviders) {
+        if (!rawProviders || (Array.isArray(rawProviders) && !rawProviders.length)) {
+            throw new Error('Missing rawProviders parameter.');
+        }
         rawProviders = !Array.isArray(rawProviders) ? [rawProviders] : rawProviders;
         this.providerContainer.register(rawProviders, { isSingleton: true });
         return this;
     }
     register(rawProviders) {
+        if (!rawProviders || (Array.isArray(rawProviders) && !rawProviders.length)) {
+            throw new Error('Missing rawProviders parameter.');
+        }
         rawProviders = !Array.isArray(rawProviders) ? [rawProviders] : rawProviders;
         this.providerContainer.register(rawProviders);
         return this;
     }
-    resolve(tokenOrType) {
-        const provider = this.providerContainer.resolve(tokenOrType);
+    resolve(tokenOrMetatype) {
+        if (!tokenOrMetatype)
+            throw new Error('Missing tokenOrMetatype parameter.');
+        const provider = this.providerContainer.resolve(tokenOrMetatype);
         return provider.instance;
     }
     clear() {
@@ -40,41 +47,19 @@ class TornadoStatic {
     }
 }
 __decorate([
-    log_decorator_1.Log({
-        message: injectedParameters => {
-            const rawProviders = !Array.isArray(injectedParameters[0])
-                ? [injectedParameters[0]]
-                : injectedParameters[0];
-            return `${rawProviders.length} providers have been registered as singleton`;
-        },
-        injectOriginalMethodArgs: true,
-    }),
+    catch_error_decorator_1.CatchError(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Object)
 ], TornadoStatic.prototype, "registerAsSingleton", null);
 __decorate([
-    log_decorator_1.Log({
-        message: injectedParameters => {
-            const rawProviders = !Array.isArray(injectedParameters[0])
-                ? [injectedParameters[0]]
-                : injectedParameters[0];
-            return `${rawProviders.length} providers have been registered`;
-        },
-        injectOriginalMethodArgs: true,
-    }),
+    catch_error_decorator_1.CatchError(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Object)
 ], TornadoStatic.prototype, "register", null);
 __decorate([
-    log_decorator_1.Log({
-        message: injectedParameters => {
-            const token = provider_1.Provider.getToken(injectedParameters[0]);
-            return `[${token}] provider have been resolved`;
-        },
-        injectOriginalMethodArgs: true,
-    }),
+    catch_error_decorator_1.CatchError(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", typeof (_a = typeof T !== "undefined" && T) === "function" && _a || Object)

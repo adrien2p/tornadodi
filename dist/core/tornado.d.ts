@@ -1,9 +1,9 @@
-import { TokenTypeProvider } from './interfaces/token-type-provider.interface';
+import { TokenMetatypeRawProvider } from './interfaces/token-metatype-raw-provider.interface';
 declare class TornadoStatic {
     private providerContainer;
-    registerAsSingleton<T>(rawProviders: TokenTypeProvider<T> | (new (...args: any[]) => T) | (TokenTypeProvider<T> | (new (...args: any[]) => T))[]): this;
-    register<T>(rawProviders: TokenTypeProvider<T> | (new (...args: any[]) => T) | (TokenTypeProvider<T> | (new (...args: any[]) => T))[]): this;
-    resolve<T>(tokenOrType: string | (new (...args: any[]) => T)): T;
+    registerAsSingleton<T>(rawProviders: TokenMetatypeRawProvider<T> | (new (...args: any[]) => T) | (TokenMetatypeRawProvider<T> | (new (...args: any[]) => T))[]): this;
+    register<T>(rawProviders: TokenMetatypeRawProvider<T> | (new (...args: any[]) => T) | (TokenMetatypeRawProvider<T> | (new (...args: any[]) => T))[]): this;
+    resolve<T>(tokenOrMetatype: string | (new (...args: any[]) => T)): T;
     clear(): this;
     getContainerSize(): number;
 }

@@ -34,6 +34,20 @@ describe("Tornado", () => {
     }
 
     describe('should register as singleton and resolve', () => {
+        test("or throw if there is no parameter provided", () => {
+            try {
+                Tornado.registerAsSingleton();
+            } catch (e) {
+                expect(e.message).toBe('Error: Missing rawProviders parameter.');
+            }
+
+            try {
+                Tornado.resolve();
+            } catch (e) {
+                expect(e.message).toBe('Error: Missing tokenOrMetatype parameter.');
+            }
+        });
+
         test("a raw provider by giving a class", () => {
             const tornado = Tornado.registerAsSingleton(Foo);
 
@@ -60,10 +74,10 @@ describe("Tornado", () => {
         test("multiple raw providers by giving object with token and type", () => {
             const tornado = Tornado.registerAsSingleton([{
                 token: 'foo',
-                type: Foo
+                metatype: Foo
             }, {
                 token: 'bar',
-                type: Bar
+                metatype: Bar
             }]);
 
             expect(tornado.resolve<Foo>('foo') instanceof Foo).toBe(true);
@@ -76,6 +90,20 @@ describe("Tornado", () => {
 
     describe('should register as not a singleton and resolve', () => {
         beforeAll(() => Tornado.clear());
+
+        test("or throw if there is no parameter provided", () => {
+            try {
+                Tornado.register();
+            } catch (e) {
+                expect(e.message).toBe('Error: Missing rawProviders parameter.');
+            }
+
+            try {
+                Tornado.resolve();
+            } catch (e) {
+                expect(e.message).toBe('Error: Missing tokenOrMetatype parameter.');
+            }
+        });
 
         test("a raw provider by giving a class", () => {
             const tornado = Tornado.register(Foo);
@@ -103,10 +131,10 @@ describe("Tornado", () => {
         test("multiple raw providers by giving object with token and type", () => {
             const tornado = Tornado.register([{
                 token: 'foo',
-                type: Foo
+                metatype: Foo
             }, {
                 token: 'bar',
-                type: Bar
+                metatype: Bar
             }]);
 
             expect(tornado.resolve<Foo>('foo') instanceof Foo).toBe(true);

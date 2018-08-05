@@ -21,7 +21,7 @@ describe("ProviderContainer", () => {
     });
 
     test('should allow to resolve a provider through the container', () => {
-        let provider = new Provider({ token: 'Foo', type: Foo });
+        let provider = new Provider({ token: 'Foo', metatype: Foo });
         container.resolve(provider.token);
         provider = container.get(provider.token);
 
@@ -30,7 +30,7 @@ describe("ProviderContainer", () => {
     });
 
     test('should allow to update a provider', () => {
-        let provider = new Provider({ token: 'Foo', type: Foo });
+        let provider = new Provider({ token: 'Foo', metatype: Foo });
 
         expect(provider.instance).toBe(null);
         expect(provider.isResolved).toBe(false);
@@ -48,7 +48,7 @@ describe("ProviderContainer", () => {
 
         expect(provider).toBeDefined();
         expect(provider.token).toBe('Foo');
-        expect(provider.type).toBe(Foo);
+        expect(provider.metatype).toBe(Foo);
     });
 
     test('should allow to be cleared', () => {

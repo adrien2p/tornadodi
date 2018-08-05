@@ -1,21 +1,21 @@
 import 'reflect-metadata';
 import { PARAMTYPES_METADATA, SELF_PARAMTYPES } from '../constants/metadata.constant';
 import { ProviderContainer } from './provider-container';
-import { TokenTypeProvider } from './interfaces/token-type-provider.interface';
+import { TokenMetatypeRawProvider } from './interfaces/token-metatype-raw-provider.interface';
 
 export class Provider<T> {
 	public token: string;
-	public type: new (...args: any[]) => T;
+	public metatype: new (...args: any[]) => T;
 	public instance: T;
 	public isSingleton: boolean;
 	private $$resolved: boolean;
 
 	constructor(
-		rawProvider: TokenTypeProvider<T> | (new (...args: any[]) => T),
+		rawProvider: TokenMetatypeRawProvider<T> | (new (...args: any[]) => T),
 		options?: { isSingleton: boolean }
 	) {
 		this.token = typeof rawProvider === 'function' ? rawProvider.name : rawProvider.token;
-		this.type = typeof rawProvider === 'function' ? rawProvider : rawProvider.type;
+		this.metatype = typeof rawProvider === 'function' ? rawProvider : rawProvider.metatype;
 		this.instance = null;
 		this.$$resolved = false;
 		this.isSingleton = options ? options.isSingleton : false;
@@ -25,23 +25,22 @@ export class Provider<T> {
 		return this.$$resolved;
 	}
 
-	static getToken(tokenOrType: string | (new (...args: any[]) => any)): string {
-		if (typeof tokenOrType === 'function') return tokenOrType.name;
-		return tokenOrType;
+	static getToken(tokenOrMetatype: string | (new (...args: any[]) => any)): string {
+		return (<any>tokenOrMetatype).name || tokenOrMetatype;
 	}
 
 	public resolve(providerContainer: ProviderContainer): Provider<T> {
-		const { token, type: ClassProvider } = this;
+		const { token, metatype: Metatype } = this;
 		if (this.$$resolved && this.isSingleton) return providerContainer.get(token);
 
-		const params = Reflect.getMetadata(PARAMTYPES_METADATA, ClassProvider) || [];
-		const injectedParams = Reflect.getMetadata(SELF_PARAMTYPES, ClassProvider) || [];
+		const params = Reflect.getMetadata(PARAMTYPES_METADATA, Metatype) || [];
+		const injectedParams = Reflect.getMetadata(SELF_PARAMTYPES, Metatype) || [];
 		if (!params.length) {
-			this.instance = new ClassProvider();
+			this.instance = new Metatype();
 		} else {
 			injectedParams.map(
-				(p: { index: number; tokenOrType: string | (new (...args: any[]) => any) }) =>
-					(params[p.index] = p.tokenOrType)
+				(p: { index: number; token: string | (new (...args: any[]) => any) }) =>
+					(params[p.index] = p.token)
 			);
 			const resolvedParams = params.map((param: string | (new (...args: any[]) => any)) => {
 				const provider = providerContainer.get(Provider.getToken(param));
@@ -49,7 +48,7 @@ export class Provider<T> {
 					? provider.instance
 					: provider.resolve(providerContainer).instance;
 			});
-			this.instance = new ClassProvider(...resolvedParams);
+			this.instance = new Metatype(...resolvedParams);
 		}
 
 		this.$$resolved = true;

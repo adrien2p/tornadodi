@@ -1,15 +1,15 @@
 import { Provider } from './provider';
-import { TokenTypeProvider } from './interfaces/token-type-provider.interface';
+import { TokenMetatypeRawProvider } from './interfaces/token-metatype-raw-provider.interface';
 export declare class ProviderContainer {
     private container;
     readonly size: number;
-    register<T>(rawProviders: (TokenTypeProvider<T> | (new (...args: any[]) => T))[], options?: {
+    register<T>(rawProviders: (TokenMetatypeRawProvider<T> | (new (...args: any[]) => T))[], options?: {
         isSingleton: boolean;
     }): {
         count: number;
     };
     updateProvider<T>(provider: Provider<T>): void;
-    resolve<T>(tokenOrType: string | (new (...args: any[]) => T)): Provider<T>;
+    resolve<T>(tokenOrMetatype: string | (new (...args: any[]) => T)): Provider<T>;
     get(token: string): Provider<any>;
     clear(): void;
 }

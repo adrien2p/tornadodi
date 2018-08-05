@@ -12,6 +12,6 @@ describe("Using Inject", () => {
     test("should register the index and the token into SELF_PARAMTYPES", () => {
         expect(Array.isArray(Reflect.getMetadata(SELF_PARAMTYPES, InjectableClass))).toBe(true);
         expect(Reflect.getMetadata(SELF_PARAMTYPES, InjectableClass).length === 1).toBe(true);
-        expect(Reflect.getMetadata(SELF_PARAMTYPES, InjectableClass)[0]).toEqual({ index: 0, tokenOrType: 'token' });
+        expect(Reflect.getMetadata(SELF_PARAMTYPES, InjectableClass)[0]).toEqual({ index: 0, token: 'token' });
     });
 });

@@ -5,7 +5,7 @@ const metadata_constant_1 = require("../constants/metadata.constant");
 class Provider {
     constructor(rawProvider, options) {
         this.token = typeof rawProvider === 'function' ? rawProvider.name : rawProvider.token;
-        this.type = typeof rawProvider === 'function' ? rawProvider : rawProvider.type;
+        this.metatype = typeof rawProvider === 'function' ? rawProvider : rawProvider.metatype;
         this.instance = null;
         this.$$resolved = false;
         this.isSingleton = options ? options.isSingleton : false;
@@ -13,29 +13,27 @@ class Provider {
     get isResolved() {
         return this.$$resolved;
     }
-    static getToken(tokenOrType) {
-        if (typeof tokenOrType === 'function')
-            return tokenOrType.name;
-        return tokenOrType;
+    static getToken(tokenOrMetatype) {
+        return tokenOrMetatype.name || tokenOrMetatype;
     }
     resolve(providerContainer) {
-        const { token, type: ClassProvider } = this;
+        const { token, metatype: Metatype } = this;
         if (this.$$resolved && this.isSingleton)
             return providerContainer.get(token);
-        const params = Reflect.getMetadata(metadata_constant_1.PARAMTYPES_METADATA, ClassProvider) || [];
-        const injectedParams = Reflect.getMetadata(metadata_constant_1.SELF_PARAMTYPES, ClassProvider) || [];
+        const params = Reflect.getMetadata(metadata_constant_1.PARAMTYPES_METADATA, Metatype) || [];
+        const injectedParams = Reflect.getMetadata(metadata_constant_1.SELF_PARAMTYPES, Metatype) || [];
         if (!params.length) {
-            this.instance = new ClassProvider();
+            this.instance = new Metatype();
         }
         else {
-            injectedParams.map((p) => (params[p.index] = p.tokenOrType));
+            injectedParams.map((p) => (params[p.index] = p.token));
             const resolvedParams = params.map((param) => {
                 const provider = providerContainer.get(Provider.getToken(param));
                 return provider.$$resolved && provider.isSingleton
                     ? provider.instance
                     : provider.resolve(providerContainer).instance;
             });
-            this.instance = new ClassProvider(...resolvedParams);
+            this.instance = new Metatype(...resolvedParams);
         }
         this.$$resolved = true;
         providerContainer.updateProvider(this);

@@ -23,7 +23,7 @@
   - [Registering and resolving](#registering-and-resolving)
     - [registerAsSingleton](#registerAsSingleton)
     - [register](#register)
-  - [Resolve a class](#resolve-a-class)
+    - [Resolve a class](#resolve-a-class)
   - [Clear the container](#clear-the-container)
 - [Team](#team)
 - [License](#license)
@@ -103,21 +103,15 @@ export class Foo {
     constructor(@Inject('barToken') private bar: Bar)
 } 
 ```
-```javascript
-// Javascript
-const Injectable = require('tornadodi').Injectable;
-const Dependencies = require('tornadodi').Dependencies;
 
-@Injetable()
-@Dependencies('barToken')
-export class Foo { 
-    constructor(bar)
-} 
+###### Take as parameter
 
-module.exports = Foo;
-```
+Only one parameter.
 
-> Take as parameter a `string` corresponding to a token or `(new (...args: any[]) => any)` corresponding to a class
+| Parameter type | Example |
+|:---:|:---:|
+| `string` | `'fooToken'` |
+| `(new (...args: any[]) => any)` | `Foo` |
 
 #### @Dependencies()
 
@@ -139,11 +133,18 @@ export class Foo {
 module.exports = Foo;
 ```
 
-> Take as parameter a `string` corresponding to a token or `(new (...args: any[]) => any)` corresponding to a class
+###### Take as parameter
+
+Any number of parameter.
+
+| Parameter type | Example |
+|:---:|:---:|
+| `string` | `'fooToken'` |
+| `(new (...args: any[]) => any)` | `Foo` |
 
 ### Registering and resolving
 
-During the time you are using `TornadoDI` you will be able to register any class at any time and resolve them
+During the time you are using `TornadoDI` you will be able to register any classes at any time and resolve them
 when you want. The resolution is made only when it is asked for and never during the registration for performance
 purpose.
 
@@ -152,12 +153,12 @@ purpose.
 After that you have created your class and used the appropriate decorator (see below), you will be able to register all of them.
 Registering a class does not mean that she's resolved as the same time (We will see how the resolution work in the [Resolve dependencies](#resolve-dependencies) section).
 
-To register a new class or multiple class you have two possibilities.
+To register a new class or multiple classes you have two possibilities.
 
 ##### registerAsSingleton
 
 The `registerAsSingleton` method will provide you a way to explicitly register a class that can be instantiated only once in the 
-whole container. The singleton will be used as well to instantiate other class with always the same instance if they inject this singleton.
+whole container. The singleton will be used as well to instantiate other classes with always the same instance if they inject this singleton.
 
 To use this methods see the following example.
 
@@ -168,8 +169,8 @@ import Foo from './foo.service';
 import { Tornado } form 'tornadodi';
 
 const bootstrap = () => {
-    // Registering the two class.
-    tornado.registerAsSingleton([Foo, Bar]);
+    // Registering the two classes.
+    Tornado.registerAsSingleton([Foo, Bar]);
 };
 bootstrap();
 ```
@@ -178,16 +179,26 @@ bootstrap();
 // Javascript
 const Bar = require('./bar.service');
 const Foo = require('./foo.service');
-const tornado = require('tornadodi').tornado;
+const Tornado = require('tornadodi').Tornado
 
 const bootstrap = () => {
-    // Registering the two class.
-    tornado.registerAsSingleton([Foo, Bar]);
+    // Registering the two classes.
+    Tornado.registerAsSingleton([Foo, Bar]);
 };
 bootstrap();
 ```
 
-> Take as parameter an `object` as `{ token: 'MyToken', type: Foo }` or `(new (...args: any[]) => any)` corresponding to a class or
+###### Take as parameter
+
+Only one parameter.
+
+| Parameter type | Example |
+|:---:|:---:|
+| `{ token: string; metatype: (new (...args: any[]) => any) }` | `{ token: 'MyToken', metatype: Foo }` |
+| `(new (...args: any[]) => any)` | `Foo` |
+| `Array</* Previous types */>` | `[{ token: 'MyToken', metatype: Foo }, Bar]` |
+
+> Take as parameter an `object` as `{ token: 'MyToken', metatype: Foo }` or `(new (...args: any[]) => any)` corresponding to a class or
 a mixed array of the previous specified types
 
 ##### register 
@@ -205,8 +216,8 @@ import Foo from './foo.service';
 import { Tornado } form 'tornadodi';
 
 const bootstrap = () => {
-    // Registering the two class.
-    tornado.register([Foo, Bar]);
+    // Registering the two classes.
+    Tornado.register([Foo, Bar]);
 };
 bootstrap();
 ```
@@ -214,21 +225,28 @@ bootstrap();
 // Javascript
 const Bar = require('./bar.service');
 const Foo = require('./foo.service');
-const tornado = require('tornadodi').tornado;
+const Tornado = require('tornadodi').Tornado
 
 const bootstrap = () => {
-    // Registering the two class.
-    tornado.register([Foo, Bar]);
+    // Registering the two classes.
+    Tornado.register([Foo, Bar]);
 };
 bootstrap();
 ```
 
-> Take as parameter an `object` as `{ token: 'MyToken', type: Foo }` or `(new (...args: any[]) => any)` corresponding to a class or
-a mixed array of the previous specified types
+###### Take as parameter
+
+Only one parameter.
+
+| Parameter type | Example |
+|:---:|:---:|
+| `{ token: string; metatype: (new (...args: any[]) => any) }` | `{ token: 'MyToken', metatype: Foo }` |
+| `(new (...args: any[]) => any)` | `Foo` |
+| `Array</* Previous types */>` | `[{ token: 'MyToken', metatype: Foo }, Bar]` |
 
 #### Resolve a class
 
-After have been registering the different class, you will be able to resolve them. The resolution of any class is made
+After have been registering the different classes, you will be able to resolve them. The resolution of any classes is made
 when you call the `resolve` method. That means than the dependency resolution is lazy and apply when it requested.
 
 The resolution will resolve the class and it's dependencies, if they are register as singleton the next resolve will return the 
@@ -241,10 +259,10 @@ import Foo from './foo.service';
 import { Tornado } form 'tornadodi';
 
 const bootstrap = () => {
-    tornado.register([Foo, Bar]);
+    Tornado.register([Foo, Bar]);
     // Resolving a dependency.
-    const foo = tornado.resolve<Foo>(Foo);
-    const bar = tornado.resolve<Bar>(Bar);
+    const foo = Tornado.resolve<Foo>(Foo);
+    const bar = Tornado.resolve<Bar>(Bar);
 };
 bootstrap();
 ```
@@ -252,47 +270,25 @@ bootstrap();
 // Javascript
 const Bar = require('./bar.service');
 const Foo = require('./foo.service');
-const tornado = require('tornadodi').tornado;
+const Tornado = require('tornadodi').Tornado
 
 const bootstrap = () => {
-    tornado.register([Foo, Bar]);
+    Tornado.register([Foo, Bar]);
     // Resolving a dependency.
-    const foo = tornado.resolve(Foo);
-    const bar = tornado.resolve(Bar);
+    const foo = Tornado.resolve(Foo);
+    const bar = Tornado.resolve(Bar);
 };
 bootstrap();
 ```
 
-> Take as parameter an `string` as `MyToken` or `(new (...args: any[]) => any)` corresponding to a class
+###### Take as parameter
 
-```typescript
-// Typescript
-import Bar from './bar.service';
-import Foo from './foo.service';
-import { Tornado } form 'tornadodi';
+Only one parameter.
 
-const bootstrap = () => {
-    tornado.register([{ token: 'foo', type: Foo }, Bar]);
-    // Resolving a dependency.
-    const foo = tornado.resolve<Foo>('foo');
-    const bar = tornado.resolve<Bar>(Bar);
-};
-bootstrap();
-```
-```javascript
-// Javascript
-const Bar = require('./bar.service');
-const Foo = require('./foo.service');
-const tornado = require('tornadodi').tornado;
-
-const bootstrap = () => {
-    tornado.register([{ token: 'foo', type: Foo }, Bar]);
-    // Resolving a dependency.
-    const foo = tornado.resolve('foo');
-    const bar = tornado.resolve(Bar);
-};
-bootstrap();
-```
+| Parameter type | Example |
+|:---:|:---:|
+| `string` | `'fooToken'` |
+| `(new (...args: any[]) => any)` | `Foo` |
 
 ### Clear the container
 
@@ -306,14 +302,14 @@ import Foo from './foo.service';
 import { Tornado } form 'tornadodi';
 
 const bootstrap = () => {
-    tornado.register([{ token: 'foo', type: Foo }, Bar]);
-    const foo = tornado.resolve<Foo>('foo');
-    const bar = tornado.resolve<Bar>(Bar);
-    console.log(tornado.getContainerSize()); // result: 2;
+    Tornado.register([{ token: 'foo', metatype: Foo }, Bar]);
+    const foo = Tornado.resolve<Foo>('foo');
+    const bar = Tornado.resolve<Bar>(Bar);
+    console.log(Tornado.getContainerSize()); // result: 2;
     
     // Reset container
-    tornado.clear();
-    console.log(tornado.getContainerSize()); // result: 0;
+    Tornado.clear();
+    console.log(Tornado.getContainerSize()); // result: 0;
 };
 bootstrap();
 ```
@@ -321,17 +317,17 @@ bootstrap();
 // Javascript
 const Bar = require('./bar.service');
 const Foo = require('./foo.service');
-const tornado = require('tornadodi').tornado;
+const Tornado = require('tornadodi').Tornado
 
 const bootstrap = () => {
-    tornado.register([{ token: 'foo', type: Foo }, Bar]);
-    const foo = tornado.resolve('foo');
-    const bar = tornado.resolve(Bar);
-    console.log(tornado.getContainerSize()); // result: 2;
+    Tornado.register([{ token: 'foo', metatype: Foo }, Bar]);
+    const foo = Tornado.resolve('foo');
+    const bar = Tornado.resolve(Bar);
+    console.log(Tornado.getContainerSize()); // result: 2;
     
     // Reset container
-    tornado.clear();
-    console.log(tornado.getContainerSize()); // result: 0;
+    Tornado.clear();
+    console.log(Tornado.getContainerSize()); // result: 0;
 };
 bootstrap();
 ```

@@ -23,32 +23,12 @@ export class Logger {
 		});
 	}
 
-	zone(originalMethodArgs: any[], callback: () => any, options: LoggerZoneOptions): any {
-		options = {
-			showElapsedTime: true,
-			injectOriginalMethodArgs: false,
-			...options,
-		};
-
-		let startAt: Date = new Date();
-		const callbackResult = callback();
-
-		if (!options.showElapsedTime) return '';
-		const formattedElapsedTime = this.getFormattedElapsedTime(startAt, new Date());
-
-		let message = options.message;
-		message =
-			typeof message === 'function'
-				? message(options.injectOriginalMethodArgs ? originalMethodArgs : null)
-				: message;
-		message += formattedElapsedTime;
-
-		this.winstonLogger.info(message);
-
-		return callbackResult;
-	}
-
-	private getFormattedElapsedTime(start: Date, end: Date): string {
-		return ` +${Math.abs(end.getTime() - start.getTime())}ms`;
+	catchError(callback: () => any): any {
+		try {
+			return callback();
+		} catch (e) {
+			this.winstonLogger.error(`${e.message}\n${e.stack}`);
+			throw new Error(e);
+		}
 	}
 }

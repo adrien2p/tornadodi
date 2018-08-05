@@ -1,60 +1,44 @@
 import { ProviderContainer } from './provider-container';
-import { TokenTypeProvider } from './interfaces/token-type-provider.interface';
-import { Log } from '../decorators/log.decorator';
-import { Provider } from './provider';
+import { TokenMetatypeRawProvider } from './interfaces/token-metatype-raw-provider.interface';
+import { CatchError } from '../decorators/catch-error.decorator';
 
 class TornadoStatic {
 	private providerContainer: ProviderContainer = new ProviderContainer();
 
-	@Log({
-		message: injectedParameters => {
-			const rawProviders = !Array.isArray(injectedParameters[0])
-				? [injectedParameters[0]]
-				: injectedParameters[0];
-			return `${rawProviders.length} providers have been registered as singleton`;
-		},
-		injectOriginalMethodArgs: true,
-	})
+	@CatchError()
 	public registerAsSingleton<T>(
 		rawProviders:
-			| TokenTypeProvider<T>
+			| TokenMetatypeRawProvider<T>
 			| (new (...args: any[]) => T)
-			| (TokenTypeProvider<T> | (new (...args: any[]) => T))[]
+			| (TokenMetatypeRawProvider<T> | (new (...args: any[]) => T))[]
 	): this {
+		if (!rawProviders || (Array.isArray(rawProviders) && !rawProviders.length)) {
+			throw new Error('Missing rawProviders parameter.');
+		}
 		rawProviders = !Array.isArray(rawProviders) ? [rawProviders] : rawProviders;
 		this.providerContainer.register<T>(rawProviders, { isSingleton: true });
 		return this;
 	}
 
-	@Log({
-		message: injectedParameters => {
-			const rawProviders = !Array.isArray(injectedParameters[0])
-				? [injectedParameters[0]]
-				: injectedParameters[0];
-			return `${rawProviders.length} providers have been registered`;
-		},
-		injectOriginalMethodArgs: true,
-	})
+	@CatchError()
 	public register<T>(
 		rawProviders:
-			| TokenTypeProvider<T>
+			| TokenMetatypeRawProvider<T>
 			| (new (...args: any[]) => T)
-			| (TokenTypeProvider<T> | (new (...args: any[]) => T))[]
+			| (TokenMetatypeRawProvider<T> | (new (...args: any[]) => T))[]
 	): this {
+		if (!rawProviders || (Array.isArray(rawProviders) && !rawProviders.length)) {
+			throw new Error('Missing rawProviders parameter.');
+		}
 		rawProviders = !Array.isArray(rawProviders) ? [rawProviders] : rawProviders;
 		this.providerContainer.register<T>(rawProviders);
 		return this;
 	}
 
-	@Log({
-		message: injectedParameters => {
-			const token = Provider.getToken(injectedParameters[0]);
-			return `[${token}] provider have been resolved`;
-		},
-		injectOriginalMethodArgs: true,
-	})
-	public resolve<T>(tokenOrType: string | (new (...args: any[]) => T)): T {
-		const provider = this.providerContainer.resolve(tokenOrType);
+	@CatchError()
+	public resolve<T>(tokenOrMetatype: string | (new (...args: any[]) => T)): T {
+		if (!tokenOrMetatype) throw new Error('Missing tokenOrMetatype parameter.');
+		const provider = this.providerContainer.resolve(tokenOrMetatype);
 		return provider.instance;
 	}
 
