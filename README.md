@@ -2,7 +2,7 @@
   <img atl="TornadoDI" src="./docs/assets/tornadoDI.png"/>
 </p>
 
-# TornadoDI
+# TornadoDI :tornado:
 
 > TornadoDI provide a modern lite way to deal with dependency injection into your Typescript or javascript project
 
