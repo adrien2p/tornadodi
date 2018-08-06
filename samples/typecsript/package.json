@@ -12,7 +12,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "tornadodi": "^1.0.9"
+    "tornadodi": "^1.1.0"
   },
   "devDependencies": {
     "reflect-metadata": "^0.1.12"

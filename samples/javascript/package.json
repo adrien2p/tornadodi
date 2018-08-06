@@ -13,7 +13,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "tornadodi": "^1.0.9"
+    "tornadodi": "^1.1.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.56",
