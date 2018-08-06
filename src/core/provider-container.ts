@@ -2,7 +2,7 @@ import { Provider } from './provider';
 import { TokenMetatypeRawProvider } from './interfaces/token-metatype-raw-provider.interface';
 
 export class ProviderContainer {
-	private container: Map<string, Provider<any>> = new Map();
+	private container: Map<string, Provider<any>> = new Map<string, Provider<any>>();
 
 	get size(): number {
 		return this.container.size;

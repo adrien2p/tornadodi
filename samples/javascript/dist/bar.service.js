@@ -8,7 +8,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var Injectable = require('tornadojs').Injectable;
+var Injectable = require('tornadodi').Injectable;
 
 var BarService = (_dec = Injectable(), _dec(_class =
 /*#__PURE__*/

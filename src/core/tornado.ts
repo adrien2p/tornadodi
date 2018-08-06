@@ -3,20 +3,26 @@ import { TokenMetatypeRawProvider } from './interfaces/token-metatype-raw-provid
 import { CatchError } from '../decorators/catch-error.decorator';
 
 class TornadoStatic {
-	private providerContainer: ProviderContainer = new ProviderContainer();
+	private containers: Map<string, ProviderContainer> = new Map<string, ProviderContainer>();
+
+	constructor() {
+		const defaultContainer = new ProviderContainer();
+		this.containers.set('default', defaultContainer);
+	}
 
 	@CatchError()
 	public registerAsSingleton<T>(
 		rawProviders:
 			| TokenMetatypeRawProvider<T>
 			| (new (...args: any[]) => T)
-			| (TokenMetatypeRawProvider<T> | (new (...args: any[]) => T))[]
+			| (TokenMetatypeRawProvider<T> | (new (...args: any[]) => T))[],
+		scope?: string
 	): this {
 		if (!rawProviders || (Array.isArray(rawProviders) && !rawProviders.length)) {
 			throw new Error('Missing rawProviders parameter.');
 		}
 		rawProviders = !Array.isArray(rawProviders) ? [rawProviders] : rawProviders;
-		this.providerContainer.register<T>(rawProviders, { isSingleton: true });
+		this.getScopedContainer(scope).register<T>(rawProviders, { isSingleton: true });
 		return this;
 	}
 
@@ -25,30 +31,38 @@ class TornadoStatic {
 		rawProviders:
 			| TokenMetatypeRawProvider<T>
 			| (new (...args: any[]) => T)
-			| (TokenMetatypeRawProvider<T> | (new (...args: any[]) => T))[]
+			| (TokenMetatypeRawProvider<T> | (new (...args: any[]) => T))[],
+		scope?: string
 	): this {
 		if (!rawProviders || (Array.isArray(rawProviders) && !rawProviders.length)) {
 			throw new Error('Missing rawProviders parameter.');
 		}
 		rawProviders = !Array.isArray(rawProviders) ? [rawProviders] : rawProviders;
-		this.providerContainer.register<T>(rawProviders);
+		this.getScopedContainer(scope).register<T>(rawProviders);
 		return this;
 	}
 
 	@CatchError()
-	public resolve<T>(tokenOrMetatype: string | (new (...args: any[]) => T)): T {
+	public resolve<T>(tokenOrMetatype: string | (new (...args: any[]) => T), scope?: string): T {
 		if (!tokenOrMetatype) throw new Error('Missing tokenOrMetatype parameter.');
-		const provider = this.providerContainer.resolve(tokenOrMetatype);
+		const provider = this.getScopedContainer(scope).resolve(tokenOrMetatype);
 		return provider.instance;
 	}
 
-	public clear(): this {
-		this.providerContainer.clear();
+	public clear(scope?: string): this {
+		this.getScopedContainer(scope).clear();
 		return this;
 	}
 
-	public getContainerSize(): number {
-		return this.providerContainer.size;
+	public getContainerSize(scope?: string): number {
+		return this.getScopedContainer(scope).size;
+	}
+
+	private getScopedContainer(scope?: string): ProviderContainer {
+		scope = scope || 'default';
+		return (
+			this.containers.get(scope) || this.containers.set(scope, new ProviderContainer()).get(scope)
+		);
 	}
 }
 

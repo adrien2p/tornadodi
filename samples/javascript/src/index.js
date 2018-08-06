@@ -1,6 +1,6 @@
 const BarService = require('./bar.service');
 const FooService = require('./foo.service');
-const tornado = require('tornadojs').Tornado;
+const tornado = require('tornadodi').Tornado;
 
 const bootstrap = function() {
     tornado.register([FooService, BarService]);

@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const bar_service_1 = require("./bar.service");
-const tornadojs_1 = require("tornadojs");
+const tornadodi_1 = require("tornadodi");
 let FooService = class FooService {
     constructor(bar) {
         this.bar = bar;
@@ -20,8 +20,8 @@ let FooService = class FooService {
     }
 };
 FooService = __decorate([
-    tornadojs_1.Injectable(),
-    tornadojs_1.Dependencies(bar_service_1.BarService),
+    tornadodi_1.Injectable(),
+    tornadodi_1.Dependencies(bar_service_1.BarService),
     __metadata("design:paramtypes", [bar_service_1.BarService])
 ], FooService);
 exports.FooService = FooService;

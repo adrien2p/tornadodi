@@ -1,4 +1,4 @@
-const Injectable = require('tornadojs').Injectable;
+const Injectable = require('tornadodi').Injectable;
 
 @Injectable()
 class BarService {

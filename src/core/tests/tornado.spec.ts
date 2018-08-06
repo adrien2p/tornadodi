@@ -147,5 +147,18 @@ describe("Tornado", () => {
 
     it('should return the container size', () => {
         expect(Tornado.getContainerSize()).toBe(4);
+    });
+
+    it('should be able to specify a scoped container to work with', () => {
+        expect(Tornado.getContainerSize()).toBe(4);
+        expect(Tornado.getContainerSize('scoped')).toBe(0);
+
+        Tornado.register([Foo, Bar], 'scoped');
+        expect(Tornado.getContainerSize()).toBe(4);
+        expect(Tornado.getContainerSize('scoped')).toBe(2);
+
+        Tornado.clear();
+        expect(Tornado.getContainerSize()).toBe(0);
+        expect(Tornado.getContainerSize('scoped')).toBe(2);
     })
 });

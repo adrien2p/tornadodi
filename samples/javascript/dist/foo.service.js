@@ -10,9 +10,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 var BarService = require('./bar.service');
 
-var Dependencies = require('tornadojs').Dependencies;
+var Dependencies = require('tornadodi').Dependencies;
 
-var Injectable = require('tornadojs').Injectable;
+var Injectable = require('tornadodi').Injectable;
 
 var FooService = (_dec = Injectable(), _dec2 = Dependencies(BarService), _dec(_class = _dec2(_class =
 /*#__PURE__*/

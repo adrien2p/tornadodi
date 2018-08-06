@@ -25,6 +25,7 @@
     - [register](#register)
     - [Resolve a class](#resolve-a-class)
   - [Clear the container](#clear-the-container)
+  - [Scoped container](#scoped-container)
 - [Team](#team)
 - [License](#license)
 
@@ -330,6 +331,26 @@ const bootstrap = () => {
     console.log(Tornado.getContainerSize()); // result: 0;
 };
 bootstrap();
+```
+
+### Scoped container
+
+In `TornadoDI` you are able to switch container at any time to work with.
+in every features that we have seen previously in [Features](#registering-and-resolving) from `registering and resolving` section
+you are able to specify as a second argument, the `scope` that you want to target. It will switch automatically on this
+scoped container to process the action. See the following example.
+
+```typescript
+// Typescript
+Tornado.registerAsSingleton([{ token: 'foo', metatype: Foo }, Bar], 'scoped');
+Tornado.register([{ token: 'foo', metatype: Foo }, Bar], 'scoped');
+Tornado.resolve<Bar>(Bar, 'scoped')
+```
+```javascript
+// Javascript
+Tornado.registerAsSingleton([{ token: 'foo', metatype: Foo }, Bar], 'scoped');
+Tornado.register([{ token: 'foo', metatype: Foo }, Bar], 'scoped');
+Tornado.resolve(Bar, 'scoped')
 ```
 
 ## Team

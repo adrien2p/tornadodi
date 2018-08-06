@@ -1,6 +1,6 @@
 const BarService = require('./bar.service');
-const Dependencies = require('tornadojs').Dependencies;
-const Injectable = require('tornadojs').Injectable;
+const Dependencies = require('tornadodi').Dependencies;
+const Injectable = require('tornadodi').Injectable;
 
 @Injectable()
 @Dependencies(BarService)

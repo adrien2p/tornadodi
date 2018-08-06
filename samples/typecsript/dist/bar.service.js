@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const tornadojs_1 = require("tornadojs");
+const tornadodi_1 = require("tornadodi");
 let BarService = class BarService {
     constructor() { }
     method() {
@@ -17,7 +17,7 @@ let BarService = class BarService {
     }
 };
 BarService = __decorate([
-    tornadojs_1.Injectable(),
+    tornadodi_1.Injectable(),
     __metadata("design:paramtypes", [])
 ], BarService);
 exports.BarService = BarService;
