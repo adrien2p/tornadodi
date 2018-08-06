@@ -336,9 +336,10 @@ bootstrap();
 ### Scoped container
 
 In `TornadoDI` you are able to switch container at any time to work with.
-in every features that we have seen previously in [Features](#registering-and-resolving) from `registering and resolving` section
-you are able to specify as a second argument, the `scope` that you want to target. It will switch automatically on this
-scoped container to process the action. See the following example.
+in every features that we have seen previously in [Features](#registering-and-resolving) from `registering and resolving` section.
+You are able to specify as a second argument, the `scope` that you want to target. It will switch automatically on this
+scoped container to process the action. If there is no specified scope, the default container will be used.
+See the following example.
 
 ```typescript
 // Typescript

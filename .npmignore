@@ -1,4 +1,11 @@
 .git
 .idea
+benchmark
 coverage
+node_modules
 samples
+src
+.gitignore
+.prettierrc
+.travis.yml
+.jest.json
