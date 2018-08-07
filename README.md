@@ -203,9 +203,6 @@ Only one parameter.
 | `(new (...args: any[]) => any)` | `Foo` |
 | `Array</* Previous types */>` | `[{ token: 'MyToken', metatype: Foo }, Bar]` |
 
-> Take as parameter an `object` as `{ token: 'MyToken', metatype: Foo }` or `(new (...args: any[]) => any)` corresponding to a class or
-a mixed array of the previous specified types
-
 ##### register 
 
 Otherwise, the `register` method will provide you the possibility to register a class as a non singleton one. In order words,
