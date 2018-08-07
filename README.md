@@ -11,6 +11,10 @@
 [![GitHub license](https://img.shields.io/github/license/adrien2p/tornadodi.svg)](https://github.com/adrien2p/tornadodi/blob/master/LICENSE)
 [![npm version](https://badge.fury.io/js/tornadodi.svg)](https://badge.fury.io/js/tornadodi)
 
+<p align="center">
+  <img atl="TornadoDI-graph" src="./docs/assets/tornadodi-graph.png"/>
+</p>
+
 ## Table of Contents 
 
 - [Prerequisites](#prerequisites)
