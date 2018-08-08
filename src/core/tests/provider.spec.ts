@@ -21,14 +21,6 @@ describe("Provider", () => {
         }
     }
 
-    test('should allow to get string token from token of metatype', () => {
-        const fooToken = Provider.getToken(Foo);
-        const barToken = Provider.getToken(Bar);
-
-        expect(fooToken).toBe('Foo');
-        expect(barToken).toBe('Bar');
-    });
-
    test('should allow to create a new provider as non singleton', () => {
        const provider = new Provider({ token: 'Foo', metatype: Foo });
 
@@ -58,7 +50,7 @@ describe("Provider", () => {
     test('should allow to resolve a provider from metatype', () => {
         const container = new ProviderContainer();
         container.register<any>([Foo, Bar]);
-        const provider = new Provider({ token: 'Foo', metatype: Foo });
+        const provider = new Provider(Foo);
         provider.resolve(container);
 
         expect(provider.instance).toEqual(new Foo(new Bar()));

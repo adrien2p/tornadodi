@@ -1,4 +1,4 @@
 export interface TokenUseValue {
-    token: string;
+    token: any;
     useValue: any;
 }

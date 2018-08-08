@@ -1,5 +1,5 @@
 import { Metatype } from "../types/metatype.type";
 export interface TokenMetatype<T> {
-    token: string;
+    token: any;
     metatype: Metatype<T>;
 }

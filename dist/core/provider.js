@@ -15,8 +15,7 @@ const metadata_constant_1 = require("../constants/metadata.constant");
 const provider_container_1 = require("./provider-container");
 class Provider {
     constructor(rawProvider, options) {
-        this.token =
-            typeof rawProvider === 'function' ? rawProvider.name : rawProvider.token;
+        this.token = typeof rawProvider === 'object' ? rawProvider.token : rawProvider;
         this.metatype = typeof rawProvider === 'function' ? rawProvider : rawProvider.metatype;
         this.useValue = rawProvider.useValue;
         this.useFactory = rawProvider.useFactory;
@@ -27,9 +26,6 @@ class Provider {
     }
     get isResolved() {
         return this.$$resolved;
-    }
-    static getToken(tokenOrMetatype) {
-        return tokenOrMetatype.name || tokenOrMetatype;
     }
     resolve(providerContainer) {
         if (this.$$resolved && this.isSingleton)
@@ -62,8 +58,8 @@ class Provider {
         return this;
     }
     resolveArgs(args, providerContainer) {
-        return args.map((param) => {
-            const provider = providerContainer.get(Provider.getToken(param));
+        return args.map((token) => {
+            const provider = providerContainer.get(token);
             return provider.$$resolved && provider.isSingleton
                 ? provider.instance
                 : provider.resolve(providerContainer).instance;

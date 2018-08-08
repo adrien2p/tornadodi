@@ -5,7 +5,7 @@ import { TokenUseFactory } from './interfaces/token-useFactory.interface';
 import { TokenUseValue } from './interfaces/token-useValue.interface';
 
 export class ProviderContainer {
-	private container: Map<string, Provider<any>> = new Map<string, Provider<any>>();
+	private container: Map<any, Provider<any>> = new Map<any, Provider<any>>();
 
 	get size(): number {
 		return this.container.size;
@@ -26,8 +26,7 @@ export class ProviderContainer {
 		this.container.set(provider.token, provider);
 	}
 
-	public resolve<T>(tokenOrMetatype: string | Metatype<T>): Provider<T> {
-		const token = Provider.getToken(tokenOrMetatype);
+	public resolve<T>(token: any): Provider<T> {
 		return this.container.get(token).resolve(this);
 	}
 

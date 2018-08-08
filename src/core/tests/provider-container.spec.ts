@@ -22,6 +22,7 @@ describe("ProviderContainer", () => {
 
     test('should allow to resolve a provider through the container', () => {
         let provider = new Provider({ token: 'Foo', metatype: Foo });
+        container.register([{ token: 'Foo', metatype: Foo }]);
         container.resolve(provider.token);
         provider = container.get(provider.token);
 

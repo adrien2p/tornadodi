@@ -7,7 +7,7 @@ declare class TornadoStatic {
     constructor();
     registerAsSingleton<T>(rawProviders: TokenMetatype<T> | TokenUseValue | TokenUseFactory | Metatype<T> | (TokenMetatype<T> | TokenUseValue | TokenUseFactory | Metatype<T>)[], scope?: string): this;
     register<T>(rawProviders: TokenMetatype<T> | TokenUseValue | TokenUseFactory | Metatype<T> | (TokenMetatype<T> | TokenUseValue | TokenUseFactory | Metatype<T>)[], scope?: string): this;
-    resolve<T>(tokenOrMetatype: string | Metatype<T>, scope?: string): T;
+    resolve<T>(token: any, scope?: string): T;
     clear(scope?: string): this;
     getContainerSize(scope?: string): number;
     private getScopedContainer;

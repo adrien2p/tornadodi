@@ -12,7 +12,7 @@ export declare class ProviderContainer {
         count: number;
     };
     updateProvider<T>(provider: Provider<T>): void;
-    resolve<T>(tokenOrMetatype: string | Metatype<T>): Provider<T>;
+    resolve<T>(token: any): Provider<T>;
     get(token: string): Provider<any>;
     clear(): void;
 }

@@ -44,7 +44,7 @@ describe("Tornado", () => {
             try {
                 Tornado.resolve();
             } catch (e) {
-                expect(e.message).toBe('Error: Missing tokenOrMetatype parameter.');
+                expect(e.message).toBe('Error: Missing token parameter.');
             }
         });
 
@@ -52,9 +52,7 @@ describe("Tornado", () => {
             const tornado = Tornado.registerAsSingleton<Foo>(Foo);
 
             expect(tornado.resolve<Foo>(Foo) instanceof Foo).toBe(true);
-            expect(tornado.resolve<Foo>(Foo.name) instanceof Foo).toBe(true);
-            expect(tornado.resolve<Foo>(Foo.name).method1()).toBe('method1 was called from Foo');
-            expect(tornado.resolve<Foo>(Foo.name).method1() === tornado.resolve<Foo>(Foo).method1()).toBe(true);
+            expect(tornado.resolve<Foo>(Foo).method1()).toBe('method1 was called from Foo');
         });
 
         test("a raw providers by giving object with token and useValue as static value", () => {
@@ -82,14 +80,10 @@ describe("Tornado", () => {
             const tornado = Tornado.registerAsSingleton<any>([Foo, Bar]);
 
             expect(tornado.resolve<Foo>(Foo) instanceof Foo).toBe(true);
-            expect(tornado.resolve<Foo>(Foo.name) instanceof Foo).toBe(true);
-            expect(tornado.resolve<Foo>(Foo.name).method1()).toBe('method1 was called from Foo');
-            expect(tornado.resolve<Foo>(Foo.name).method1() === tornado.resolve<Foo>(Foo).method1()).toBe(true);
+            expect(tornado.resolve<Foo>(Foo).method1()).toBe('method1 was called from Foo');
 
             expect(tornado.resolve<Bar>(Bar) instanceof Bar).toBe(true);
-            expect(tornado.resolve<Bar>(Bar.name) instanceof Bar).toBe(true);
-            expect(tornado.resolve<Bar>(Bar.name).method1()).toBe('method1 was called from Bar');
-            expect(tornado.resolve<Bar>(Bar.name).method1() === tornado.resolve<Bar>(Bar).method1()).toBe(true);
+            expect(tornado.resolve<Bar>(Bar).method1()).toBe('method1 was called from Bar');
         });
 
         test("multiple raw providers by giving object with token and metatype", () => {
@@ -122,7 +116,7 @@ describe("Tornado", () => {
             try {
                 Tornado.resolve();
             } catch (e) {
-                expect(e.message).toBe('Error: Missing tokenOrMetatype parameter.');
+                expect(e.message).toBe('Error: Missing token parameter.');
             }
         });
 
@@ -130,9 +124,7 @@ describe("Tornado", () => {
             const tornado = Tornado.register<Foo>(Foo);
 
             expect(tornado.resolve<Foo>(Foo) instanceof Foo).toBe(true);
-            expect(tornado.resolve<Foo>(Foo.name) instanceof Foo).toBe(true);
-            expect(tornado.resolve<Foo>(Foo.name).method1()).toBe('method1 was called from Foo');
-            expect(tornado.resolve<Foo>(Foo.name).method1() === tornado.resolve<Foo>(Foo).method1()).toBe(true);
+            expect(tornado.resolve<Foo>(Foo).method1()).toBe('method1 was called from Foo');
         });
 
         test("a raw providers by giving object with token and useValue as static value", () => {
@@ -145,29 +137,26 @@ describe("Tornado", () => {
         });
 
         test("a raw providers by giving object with token and useFactory to be executed", () => {
+            const symbol = Symbol('bar');
             const tornado = Tornado.register<any>([Bar, {
-                token: 'useFactory',
+                token: symbol,
                 useFactory: (bar: Bar) => {
                     return bar.method1();
                 },
                 inject: [Bar]
             }]);
 
-            expect(tornado.resolve<any>('useFactory')).toBe('method1 was called from Bar');
+            expect(tornado.resolve<any>(symbol)).toBe('method1 was called from Bar');
         });
 
         test("multiple raw providers by giving classes", () => {
             const tornado = Tornado.register<any>([Foo, Bar]);
 
             expect(tornado.resolve<Foo>(Foo) instanceof Foo).toBe(true);
-            expect(tornado.resolve<Foo>(Foo.name) instanceof Foo).toBe(true);
-            expect(tornado.resolve<Foo>(Foo.name).method1()).toBe('method1 was called from Foo');
-            expect(tornado.resolve<Foo>(Foo.name).method1() === tornado.resolve<Foo>(Foo).method1()).toBe(true);
+            expect(tornado.resolve<Foo>(Foo).method1()).toBe('method1 was called from Foo');
 
             expect(tornado.resolve<Bar>(Bar) instanceof Bar).toBe(true);
-            expect(tornado.resolve<Bar>(Bar.name) instanceof Bar).toBe(true);
-            expect(tornado.resolve<Bar>(Bar.name).method1()).toBe('method1 was called from Bar');
-            expect(tornado.resolve<Bar>(Bar.name).method1() === tornado.resolve<Bar>(Bar).method1()).toBe(true);
+            expect(tornado.resolve<Bar>(Bar).method1()).toBe('method1 was called from Bar');
         });
 
         test("multiple raw providers by giving object with token and type", () => {

@@ -50,9 +50,9 @@ class TornadoStatic {
 	}
 
 	@CatchError()
-	public resolve<T>(tokenOrMetatype: string | Metatype<T>, scope?: string): T {
-		if (!tokenOrMetatype) throw new Error('Missing tokenOrMetatype parameter.');
-		const provider = this.getScopedContainer(scope).resolve(tokenOrMetatype);
+	public resolve<T>(token: any, scope?: string): T {
+		if (!token) throw new Error('Missing token parameter.');
+		const provider = this.getScopedContainer(scope).resolve<T>(token);
 		return provider.instance;
 	}
 

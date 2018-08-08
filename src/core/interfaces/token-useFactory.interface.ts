@@ -1,5 +1,5 @@
 export interface TokenUseFactory {
-	token: string;
+	token: any;
 	useFactory: (...args: any[]) => any;
 	inject: any[]
 }

@@ -17,7 +17,6 @@ export declare class Provider<T> {
         isSingleton: boolean;
     });
     readonly isResolved: boolean;
-    static getToken(tokenOrMetatype: string | Metatype<any>): string;
     resolve(providerContainer: ProviderContainer): Provider<T>;
     private resolveArgs;
 }

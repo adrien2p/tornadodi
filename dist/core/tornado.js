@@ -34,10 +34,10 @@ class TornadoStatic {
         this.getScopedContainer(scope).register(rawProviders);
         return this;
     }
-    resolve(tokenOrMetatype, scope) {
-        if (!tokenOrMetatype)
-            throw new Error('Missing tokenOrMetatype parameter.');
-        const provider = this.getScopedContainer(scope).resolve(tokenOrMetatype);
+    resolve(token, scope) {
+        if (!token)
+            throw new Error('Missing token parameter.');
+        const provider = this.getScopedContainer(scope).resolve(token);
         return provider.instance;
     }
     clear(scope) {

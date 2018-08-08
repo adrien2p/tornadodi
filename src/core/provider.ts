@@ -21,8 +21,7 @@ export class Provider<T> {
 		rawProvider: TokenMetatype<T> | TokenUseValue | TokenUseFactory | Metatype<T>,
 		options?: { isSingleton: boolean }
 	) {
-		this.token =
-			typeof rawProvider === 'function' ? (<any>rawProvider).name : (<any>rawProvider).token;
+		this.token = typeof rawProvider === 'object' ? (<any>rawProvider).token : rawProvider;
 		this.metatype = typeof rawProvider === 'function' ? rawProvider : (<any>rawProvider).metatype;
 		this.useValue = (<any>rawProvider).useValue;
 		this.useFactory = (<any>rawProvider).useFactory;
@@ -35,10 +34,6 @@ export class Provider<T> {
 
 	get isResolved(): boolean {
 		return this.$$resolved;
-	}
-
-	static getToken(tokenOrMetatype: string | Metatype<any>): string {
-		return (<any>tokenOrMetatype).name || tokenOrMetatype;
 	}
 
 	@CatchError()
@@ -72,12 +67,9 @@ export class Provider<T> {
 		return this;
 	}
 
-	private resolveArgs(
-		args: (string | Metatype<any>)[],
-		providerContainer: ProviderContainer
-	): any[] {
-		return args.map((param: string | Metatype<any>) => {
-			const provider = providerContainer.get(Provider.getToken(param));
+	private resolveArgs(args: any[], providerContainer: ProviderContainer): any[] {
+		return args.map((token: any) => {
+			const provider = providerContainer.get(token);
 			return provider.$$resolved && provider.isSingleton
 				? provider.instance
 				: provider.resolve(providerContainer).instance;
