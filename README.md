@@ -79,16 +79,16 @@ be able to know about what as to be injected in the class to resolve.
 
 ```typescript
 // Typescript
-import { Injectable } form 'tornadodi';
+import { Injectable } from 'tornadodi';
 
-@Injetable()
+@Injectable()
 export class Foo { } 
 ```
 ```javascript
 // Javascript
 const Injectable = require('tornadodi').Injectable;
 
-@Injetable()
+@Injectable()
 class Foo { }
 
 module.exports = Foo;
@@ -101,11 +101,11 @@ To specify a token during the registration, refer you to the following section [
 
 ```typescript
 // Typescript
-import { Injectable, Inject } form 'tornadodi';
+import { Injectable, Inject } from 'tornadodi';
 
-@Injetable()
+@Injectable()
 export class Foo { 
-    constructor(@Inject('barToken') private bar: Bar)
+    constructor(private bar: Bar, @Inject('InjectByCustomToken') private soo: Soo) { }
 } 
 ```
 
@@ -129,7 +129,7 @@ to deal with the injection.
 const Injectable = require('tornadodi').Injectable;
 const Dependencies = require('tornadodi').Dependencies;
 
-@Injetable()
+@Injectable()
 @Dependencies('barToken')
 export class Foo { 
     constructor(bar)
@@ -145,7 +145,7 @@ Any number of parameter.
 | Parameter type | Example |
 |:---:|:---:|
 | `string` | `'fooToken'` |
-| `Metatype<any>` | `Foo` |
+| `Metatype<T>` | `Foo` |
 
 ### Registering and resolving
 
@@ -171,14 +171,18 @@ To use this methods see the following example.
 // Typescript
 import Bar from './bar.service';
 import Foo from './foo.service';
-import { Tornado } form 'tornadodi';
+import { Tornado } from 'tornadodi';
 
 const bootstrap = () => {
-    // Registering the two classes.
+    // Register a class
     Tornado.registerAsSingleton<Foo>(Foo);
+    // Register multiple class
     Tornado.registerAsSingleton([Foo, Bar]);
+    // Register multiple class and use custom token with metatype
     Tornado.registerAsSingleton([Foo, { token: 't1', metatype: Bar}]);
+    // Register multiple class and use custom token with static value through useValue
     Tornado.registerAsSingleton([Foo, { token: 't2', useValue: 42 }]);
+    // Register multiple class and use custom token with factory
     Tornado.registerAsSingleton([Foo, { token: 't3', useFactory: (foo) => foo.method(), inject: [Foo] }]);
 };
 bootstrap();
@@ -188,13 +192,18 @@ bootstrap();
 // Javascript
 const Bar = require('./bar.service');
 const Foo = require('./foo.service');
-const Tornado = require('tornadodi').Tornado
+const Tornado = require('tornadodi').Tornado;
 
 const bootstrap = () => {
+    // Register a class
     Tornado.registerAsSingleton(Foo);
+    // Register multiple class
     Tornado.registerAsSingleton([Foo, Bar]);
+    // Register multiple class and use custom token with metatype
     Tornado.registerAsSingleton([Foo, { token: 't1', metatype: Bar}]);
+    // Register multiple class and use custom token with static value through useValue
     Tornado.registerAsSingleton([Foo, { token: 't2', useValue: 42 }]);
+    // Register multiple class and use custom token with factory
     Tornado.registerAsSingleton([Foo, { token: 't3', useFactory: (foo) => foo.method(), inject: [Foo] }]);
 };
 bootstrap();
@@ -206,10 +215,10 @@ Only one parameter.
 
 | Parameter type | Example |
 |:---:|:---:|
-| `{ token: string; metatype: Metatype<Foo> }` | `{ token: 'MyToken', metatype: Foo }` |
-| `{ token: string; useValue: any }` | `{ token: 'MyToken', useValue: 42` |
-| `{ token: string; useFactory: (...args: any[]) => any, inject?: any[] }` | `{ token: 'MyToken', useFactory: () => 'value'` |
-| `Metatype<Foo>` | `Foo` |
+| `{ token: string; metatype: Metatype<T> }` | `{ token: 'MyToken', metatype: Foo }` |
+| `{ token: string; useValue: any }` | `{ token: 'MyToken', useValue: 42 }` |
+| `{ token: string; useFactory: (...args: any[]) => any, inject?: any[] }` | `{ token: 'MyToken', useFactory: () => 'value' }` |
+| `Metatype<T>` | `Foo` |
 | `Array</* Previous types */>` | `[{ token: 'MyToken', metatype: Foo }, Bar]` |
 
 ##### register 
@@ -224,13 +233,18 @@ To use this methods see the following example.
 // Typescript
 import Bar from './bar.service';
 import Foo from './foo.service';
-import { Tornado } form 'tornadodi';
+import { Tornado } from 'tornadodi';
 
 const bootstrap = () => {
+    // Register a class
     Tornado.register<Foo>(Foo);
+    // Register multiple class
     Tornado.register([Foo, Bar]);
+    // Register multiple class and use custom token with metatype
     Tornado.register([Foo, { token: 't1', metatype: Bar}]);
+    // Register multiple class and use custom token with static value through useValue
     Tornado.register([Foo, { token: 't2', useValue: 42 }]);
+    // Register multiple class and use custom token with factory
     Tornado.register([Foo, { token: 't3', useFactory: (foo) => foo.method(), inject: [Foo] }]);
 };
 bootstrap();
@@ -239,14 +253,18 @@ bootstrap();
 // Javascript
 const Bar = require('./bar.service');
 const Foo = require('./foo.service');
-const Tornado = require('tornadodi').Tornado
+const Tornado = require('tornadodi').Tornado;
 
 const bootstrap = () => {
-    // Registering the two classes.
+    // Register a class
     Tornado.register(Foo);
+    // Register multiple class
     Tornado.register([Foo, Bar]);
+    // Register multiple class and use custom token with metatype
     Tornado.register([Foo, { token: 't1', metatype: Bar}]);
+    // Register multiple class and use custom token with static value through useValue
     Tornado.register([Foo, { token: 't2', useValue: 42 }]);
+    // Register multiple class and use custom token with factory
     Tornado.register([Foo, { token: 't3', useFactory: (foo) => foo.method(), inject: [Foo] }]);
 };
 bootstrap();
@@ -258,10 +276,10 @@ Only one parameter.
 
 | Parameter type | Example |
 |:---:|:---:|
-| `{ token: string; metatype: Metatype<Foo> }` | `{ token: 'MyToken', metatype: Foo }` |
-| `{ token: string; useValue: any }` | `{ token: 'MyToken', useValue: 42` |
-| `{ token: string; useFactory: (...args: any[]) => any, inject?: any[] }` | `{ token: 'MyToken', useFactory: () => 'value'` |
-| `Metatype<Foo>` | `Foo` |
+| `{ token: string; metatype: Metatype<T> }` | `{ token: 'MyToken', metatype: Foo }` |
+| `{ token: string; useValue: any }` | `{ token: 'MyToken', useValue: 42 }` |
+| `{ token: string; useFactory: (...args: any[]) => any, inject?: any[] }` | `{ token: 'MyToken', useFactory: () => 'value' }` |
+| `Metatype<T>` | `Foo` |
 | `Array</* Previous types */>` | `[{ token: 'MyToken', metatype: Foo }, Bar]` |
 
 #### Resolve a class
@@ -276,13 +294,14 @@ same instance as the previous one. See the following example.
 // Typescript
 import Bar from './bar.service';
 import Foo from './foo.service';
-import { Tornado } form 'tornadodi';
+import { Tornado } from 'tornadodi';
 
 const bootstrap = () => {
     Tornado.register([Foo, Bar]);
-    // Resolving a dependency.
+    // Resolve dependency by giving a class to resolve
     const foo = Tornado.resolve<Foo>(Foo);
-    const bar = Tornado.resolve<Bar>(Bar);
+    // Resolve dependency by giving a class to resolve
+    const bar = Tornado.resolve<Bar>('barToken');
 };
 bootstrap();
 ```
@@ -290,13 +309,14 @@ bootstrap();
 // Javascript
 const Bar = require('./bar.service');
 const Foo = require('./foo.service');
-const Tornado = require('tornadodi').Tornado
+const Tornado = require('tornadodi').Tornado;
 
 const bootstrap = () => {
     Tornado.register([Foo, Bar]);
-    // Resolving a dependency.
+    // Resolve dependency by giving a class to resolve
     const foo = Tornado.resolve(Foo);
-    const bar = Tornado.resolve(Bar);
+    // Resolve dependency by giving a class to resolve
+    const bar = Tornado.resolve('barToken');
 };
 bootstrap();
 ```
@@ -308,7 +328,7 @@ Only one parameter.
 | Parameter type | Example |
 |:---:|:---:|
 | `string` | `'fooToken'` |
-| `Metatype<any>` | `Foo` |
+| `Metatype<T>` | `Foo` |
 
 ### Clear the container
 
@@ -319,7 +339,7 @@ clear all the dependencies registered into the container, you can call the `clea
 // Typescript
 import Bar from './bar.service';
 import Foo from './foo.service';
-import { Tornado } form 'tornadodi';
+import { Tornado } from 'tornadodi';
 
 const bootstrap = () => {
     Tornado.register([{ token: 'foo', metatype: Foo }, Bar]);
