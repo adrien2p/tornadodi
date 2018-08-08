@@ -1,0 +1,1 @@
+export type Metatype<T> = new (...args: any[]) => T;

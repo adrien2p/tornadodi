@@ -34,7 +34,10 @@ describe("Provider", () => {
 
        expect(provider.isSingleton).toBe(false);
        expect(provider.token).toBe('Foo');
-       expect(provider.instance).toBe(null);
+       expect(provider.instance).toBe(undefined);
+       expect(provider.useValue).toBe(undefined);
+       expect(provider.useFactory).toBe(undefined);
+       expect(provider.inject).toEqual([]);
        expect(provider.isResolved).toBe(false);
        expect(provider.metatype).toBe(Foo);
    });
@@ -44,18 +47,31 @@ describe("Provider", () => {
 
         expect(provider.isSingleton).toBe(true);
         expect(provider.token).toBe('Foo');
-        expect(provider.instance).toBe(null);
+        expect(provider.instance).toBe(undefined);
+        expect(provider.useValue).toBe(undefined);
+        expect(provider.useFactory).toBe(undefined);
+        expect(provider.inject).toEqual([]);
         expect(provider.isResolved).toBe(false);
         expect(provider.metatype).toBe(Foo);
     });
 
-    test('should allow to resolve a provider', () => {
+    test('should allow to resolve a provider from metatype', () => {
         const container = new ProviderContainer();
-        container.register([Foo, Bar]);
+        container.register<any>([Foo, Bar]);
         const provider = new Provider({ token: 'Foo', metatype: Foo });
         provider.resolve(container);
 
         expect(provider.instance).toEqual(new Foo(new Bar()));
+        expect(provider.isResolved).toBe(true);
+    });
+
+    test('should allow to resolve a provider from useValue', () => {
+        const container = new ProviderContainer();
+        container.register<any>([{ token: 'useValue', useValue: 42 }]);
+        const provider = new Provider({ token: 'useValue', useValue: 42 });
+        provider.resolve(container);
+
+        expect(provider.instance).toBe(42);
         expect(provider.isResolved).toBe(true);
     });
 });

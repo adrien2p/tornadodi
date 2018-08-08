@@ -1,6 +1,9 @@
-import { ProviderContainer } from './provider-container';
-import { TokenMetatypeRawProvider } from './interfaces/token-metatype-raw-provider.interface';
 import { CatchError } from '../decorators/catch-error.decorator';
+import { Metatype } from './types/metatype.type';
+import { ProviderContainer } from './provider-container';
+import { TokenMetatype } from './interfaces/token-metatype.interface';
+import { TokenUseFactory } from './interfaces/token-useFactory.interface';
+import { TokenUseValue } from './interfaces/token-useValue.interface';
 
 class TornadoStatic {
 	private containers: Map<string, ProviderContainer> = new Map<string, ProviderContainer>();
@@ -13,9 +16,11 @@ class TornadoStatic {
 	@CatchError()
 	public registerAsSingleton<T>(
 		rawProviders:
-			| TokenMetatypeRawProvider<T>
-			| (new (...args: any[]) => T)
-			| (TokenMetatypeRawProvider<T> | (new (...args: any[]) => T))[],
+			| TokenMetatype<T>
+			| TokenUseValue
+			| TokenUseFactory
+			| Metatype<T>
+			| (TokenMetatype<T> | TokenUseValue | TokenUseFactory | Metatype<T>)[],
 		scope?: string
 	): this {
 		if (!rawProviders || (Array.isArray(rawProviders) && !rawProviders.length)) {
@@ -29,9 +34,11 @@ class TornadoStatic {
 	@CatchError()
 	public register<T>(
 		rawProviders:
-			| TokenMetatypeRawProvider<T>
-			| (new (...args: any[]) => T)
-			| (TokenMetatypeRawProvider<T> | (new (...args: any[]) => T))[],
+			| TokenMetatype<T>
+			| TokenUseValue
+			| TokenUseFactory
+			| Metatype<T>
+			| (TokenMetatype<T> | TokenUseValue | TokenUseFactory | Metatype<T>)[],
 		scope?: string
 	): this {
 		if (!rawProviders || (Array.isArray(rawProviders) && !rawProviders.length)) {
@@ -43,7 +50,7 @@ class TornadoStatic {
 	}
 
 	@CatchError()
-	public resolve<T>(tokenOrMetatype: string | (new (...args: any[]) => T), scope?: string): T {
+	public resolve<T>(tokenOrMetatype: string | Metatype<T>, scope?: string): T {
 		if (!tokenOrMetatype) throw new Error('Missing tokenOrMetatype parameter.');
 		const provider = this.getScopedContainer(scope).resolve(tokenOrMetatype);
 		return provider.instance;

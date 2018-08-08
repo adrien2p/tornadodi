@@ -10,8 +10,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var _a;
-const provider_container_1 = require("./provider-container");
 const catch_error_decorator_1 = require("../decorators/catch-error.decorator");
+const provider_container_1 = require("./provider-container");
 class TornadoStatic {
     constructor() {
         this.containers = new Map();

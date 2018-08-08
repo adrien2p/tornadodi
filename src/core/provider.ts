@@ -1,22 +1,34 @@
 import 'reflect-metadata';
+import { CatchError } from '../decorators/catch-error.decorator';
+import { Metatype } from './types/metatype.type';
 import { PARAMTYPES_METADATA, SELF_PARAMTYPES } from '../constants/metadata.constant';
 import { ProviderContainer } from './provider-container';
-import { TokenMetatypeRawProvider } from './interfaces/token-metatype-raw-provider.interface';
+import { TokenMetatype } from './interfaces/token-metatype.interface';
+import { TokenUseFactory } from './interfaces/token-useFactory.interface';
+import { TokenUseValue } from './interfaces/token-useValue.interface';
 
 export class Provider<T> {
 	public token: string;
 	public metatype: new (...args: any[]) => T;
 	public instance: T;
 	public isSingleton: boolean;
+	public useValue: any;
+	public useFactory: (...args: any[]) => any;
+	public inject: any[];
 	private $$resolved: boolean;
 
 	constructor(
-		rawProvider: TokenMetatypeRawProvider<T> | (new (...args: any[]) => T),
+		rawProvider: TokenMetatype<T> | TokenUseValue | TokenUseFactory | Metatype<T>,
 		options?: { isSingleton: boolean }
 	) {
-		this.token = typeof rawProvider === 'function' ? rawProvider.name : rawProvider.token;
-		this.metatype = typeof rawProvider === 'function' ? rawProvider : rawProvider.metatype;
-		this.instance = null;
+		this.token =
+			typeof rawProvider === 'function' ? (<any>rawProvider).name : (<any>rawProvider).token;
+		this.metatype = typeof rawProvider === 'function' ? rawProvider : (<any>rawProvider).metatype;
+		this.useValue = (<any>rawProvider).useValue;
+		this.useFactory = (<any>rawProvider).useFactory;
+		this.inject = (<any>rawProvider).inject || [];
+
+		this.instance = undefined;
 		this.$$resolved = false;
 		this.isSingleton = options ? options.isSingleton : false;
 	}
@@ -25,34 +37,50 @@ export class Provider<T> {
 		return this.$$resolved;
 	}
 
-	static getToken(tokenOrMetatype: string | (new (...args: any[]) => any)): string {
+	static getToken(tokenOrMetatype: string | Metatype<any>): string {
 		return (<any>tokenOrMetatype).name || tokenOrMetatype;
 	}
 
+	@CatchError()
 	public resolve(providerContainer: ProviderContainer): Provider<T> {
-		const { token, metatype: Metatype } = this;
-		if (this.$$resolved && this.isSingleton) return providerContainer.get(token);
+		if (this.$$resolved && this.isSingleton) return providerContainer.get(this.token);
 
-		const params = Reflect.getMetadata(PARAMTYPES_METADATA, Metatype) || [];
-		const injectedParams = Reflect.getMetadata(SELF_PARAMTYPES, Metatype) || [];
-		if (!params.length) {
-			this.instance = new Metatype();
+		if (this.metatype) {
+			const params = Reflect.getMetadata(PARAMTYPES_METADATA, this.metatype) || [];
+			const injectedParams = Reflect.getMetadata(SELF_PARAMTYPES, this.metatype) || [];
+			if (!params.length) {
+				this.instance = new this.metatype();
+			} else {
+				/* Override params with injected params at the specific index. */
+				injectedParams.map(
+					(p: { index: number; token: string | Metatype<any> }) => (params[p.index] = p.token)
+				);
+				const resolvedArgs = this.resolveArgs(params, providerContainer);
+				this.instance = new this.metatype(...resolvedArgs);
+			}
+		} else if (this.useValue) {
+			this.instance = this.useValue;
+		} else if (this.useFactory) {
+			const resolvedArgs = this.resolveArgs(this.inject, providerContainer);
+			this.instance = this.useFactory(...resolvedArgs);
 		} else {
-			injectedParams.map(
-				(p: { index: number; token: string | (new (...args: any[]) => any) }) =>
-					(params[p.index] = p.token)
-			);
-			const resolvedParams = params.map((param: string | (new (...args: any[]) => any)) => {
-				const provider = providerContainer.get(Provider.getToken(param));
-				return provider.$$resolved && provider.isSingleton
-					? provider.instance
-					: provider.resolve(providerContainer).instance;
-			});
-			this.instance = new Metatype(...resolvedParams);
+			throw new Error(`Unable to resolve the provider with token "${this.token}"`);
 		}
 
 		this.$$resolved = true;
 		providerContainer.updateProvider(this);
 		return this;
+	}
+
+	private resolveArgs(
+		args: (string | Metatype<any>)[],
+		providerContainer: ProviderContainer
+	): any[] {
+		return args.map((param: string | Metatype<any>) => {
+			const provider = providerContainer.get(Provider.getToken(param));
+			return provider.$$resolved && provider.isSingleton
+				? provider.instance
+				: provider.resolve(providerContainer).instance;
+		});
 	}
 }

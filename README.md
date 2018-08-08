@@ -116,7 +116,7 @@ Only one parameter.
 | Parameter type | Example |
 |:---:|:---:|
 | `string` | `'fooToken'` |
-| `(new (...args: any[]) => any)` | `Foo` |
+| `Metatype<Foo>` | `Foo` |
 
 #### @Dependencies()
 
@@ -145,7 +145,7 @@ Any number of parameter.
 | Parameter type | Example |
 |:---:|:---:|
 | `string` | `'fooToken'` |
-| `(new (...args: any[]) => any)` | `Foo` |
+| `Metatype<any>` | `Foo` |
 
 ### Registering and resolving
 
@@ -187,8 +187,11 @@ const Foo = require('./foo.service');
 const Tornado = require('tornadodi').Tornado
 
 const bootstrap = () => {
-    // Registering the two classes.
+    Tornado.registerAsSingleton<Foo>(Foo);
     Tornado.registerAsSingleton([Foo, Bar]);
+    Tornado.registerAsSingleton([Foo, { token: 't1', metatype: Bar}]);
+    Tornado.registerAsSingleton([Foo, { token: 't2', useValue: 42 }]);
+    Tornado.registerAsSingleton([Foo, { token: 't3', useFactory: (foo) => foo.method(), inject: [Foo] }]);
 };
 bootstrap();
 ```
@@ -199,8 +202,10 @@ Only one parameter.
 
 | Parameter type | Example |
 |:---:|:---:|
-| `{ token: string; metatype: (new (...args: any[]) => any) }` | `{ token: 'MyToken', metatype: Foo }` |
-| `(new (...args: any[]) => any)` | `Foo` |
+| `{ token: string; metatype: Metatype<Foo> }` | `{ token: 'MyToken', metatype: Foo }` |
+| `{ token: string; useValue: any }` | `{ token: 'MyToken', useValue: 42` |
+| `{ token: string; useFactory: (...args: any[]) => any, inject?: any[] }` | `{ token: 'MyToken', useFactory: () => 'value'` |
+| `Metatype<Foo>` | `Foo` |
 | `Array</* Previous types */>` | `[{ token: 'MyToken', metatype: Foo }, Bar]` |
 
 ##### register 
@@ -218,8 +223,11 @@ import Foo from './foo.service';
 import { Tornado } form 'tornadodi';
 
 const bootstrap = () => {
-    // Registering the two classes.
+    Tornado.register<Foo>(Foo);
     Tornado.register([Foo, Bar]);
+    Tornado.register([Foo, { token: 't1', metatype: Bar}]);
+    Tornado.register([Foo, { token: 't2', useValue: 42 }]);
+    Tornado.register([Foo, { token: 't3', useFactory: (foo) => foo.method(), inject: [Foo] }]);
 };
 bootstrap();
 ```
@@ -242,8 +250,10 @@ Only one parameter.
 
 | Parameter type | Example |
 |:---:|:---:|
-| `{ token: string; metatype: (new (...args: any[]) => any) }` | `{ token: 'MyToken', metatype: Foo }` |
-| `(new (...args: any[]) => any)` | `Foo` |
+| `{ token: string; metatype: Metatype<Foo> }` | `{ token: 'MyToken', metatype: Foo }` |
+| `{ token: string; useValue: any }` | `{ token: 'MyToken', useValue: 42` |
+| `{ token: string; useFactory: (...args: any[]) => any, inject?: any[] }` | `{ token: 'MyToken', useFactory: () => 'value'` |
+| `Metatype<Foo>` | `Foo` |
 | `Array</* Previous types */>` | `[{ token: 'MyToken', metatype: Foo }, Bar]` |
 
 #### Resolve a class
@@ -290,7 +300,7 @@ Only one parameter.
 | Parameter type | Example |
 |:---:|:---:|
 | `string` | `'fooToken'` |
-| `(new (...args: any[]) => any)` | `Foo` |
+| `Metatype<any>` | `Foo` |
 
 ### Clear the container
 

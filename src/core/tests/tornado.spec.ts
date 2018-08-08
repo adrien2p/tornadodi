@@ -49,7 +49,7 @@ describe("Tornado", () => {
         });
 
         test("a raw provider by giving a class", () => {
-            const tornado = Tornado.registerAsSingleton(Foo);
+            const tornado = Tornado.registerAsSingleton<Foo>(Foo);
 
             expect(tornado.resolve<Foo>(Foo) instanceof Foo).toBe(true);
             expect(tornado.resolve<Foo>(Foo.name) instanceof Foo).toBe(true);
@@ -57,8 +57,29 @@ describe("Tornado", () => {
             expect(tornado.resolve<Foo>(Foo.name).method1() === tornado.resolve<Foo>(Foo).method1()).toBe(true);
         });
 
+        test("a raw providers by giving object with token and useValue as static value", () => {
+            const tornado = Tornado.registerAsSingleton<any>([{
+                token: 'useValue',
+                useValue: 42
+            }]);
+
+            expect(tornado.resolve<any>('useValue')).toBe(42);
+        });
+
+        test("a raw providers by giving object with token and useFactory to be executed", () => {
+            const tornado = Tornado.registerAsSingleton<any>([Bar, {
+                token: 'useFactory',
+                useFactory: (bar: Bar) => {
+                    return bar.method1();
+                },
+                inject: [Bar]
+            }]);
+
+            expect(tornado.resolve<any>('useFactory')).toBe('method1 was called from Bar');
+        });
+
         test("multiple raw providers by giving classes", () => {
-            const tornado = Tornado.registerAsSingleton([Foo, Bar]);
+            const tornado = Tornado.registerAsSingleton<any>([Foo, Bar]);
 
             expect(tornado.resolve<Foo>(Foo) instanceof Foo).toBe(true);
             expect(tornado.resolve<Foo>(Foo.name) instanceof Foo).toBe(true);
@@ -71,8 +92,8 @@ describe("Tornado", () => {
             expect(tornado.resolve<Bar>(Bar.name).method1() === tornado.resolve<Bar>(Bar).method1()).toBe(true);
         });
 
-        test("multiple raw providers by giving object with token and type", () => {
-            const tornado = Tornado.registerAsSingleton([{
+        test("multiple raw providers by giving object with token and metatype", () => {
+            const tornado = Tornado.registerAsSingleton<any>([{
                 token: 'foo',
                 metatype: Foo
             }, {
@@ -106,7 +127,7 @@ describe("Tornado", () => {
         });
 
         test("a raw provider by giving a class", () => {
-            const tornado = Tornado.register(Foo);
+            const tornado = Tornado.register<Foo>(Foo);
 
             expect(tornado.resolve<Foo>(Foo) instanceof Foo).toBe(true);
             expect(tornado.resolve<Foo>(Foo.name) instanceof Foo).toBe(true);
@@ -114,8 +135,29 @@ describe("Tornado", () => {
             expect(tornado.resolve<Foo>(Foo.name).method1() === tornado.resolve<Foo>(Foo).method1()).toBe(true);
         });
 
+        test("a raw providers by giving object with token and useValue as static value", () => {
+            const tornado = Tornado.register<any>([{
+                token: 'useValue',
+                useValue: 42
+            }]);
+
+            expect(tornado.resolve<any>('useValue')).toBe(42);
+        });
+
+        test("a raw providers by giving object with token and useFactory to be executed", () => {
+            const tornado = Tornado.register<any>([Bar, {
+                token: 'useFactory',
+                useFactory: (bar: Bar) => {
+                    return bar.method1();
+                },
+                inject: [Bar]
+            }]);
+
+            expect(tornado.resolve<any>('useFactory')).toBe('method1 was called from Bar');
+        });
+
         test("multiple raw providers by giving classes", () => {
-            const tornado = Tornado.register([Foo, Bar]);
+            const tornado = Tornado.register<any>([Foo, Bar]);
 
             expect(tornado.resolve<Foo>(Foo) instanceof Foo).toBe(true);
             expect(tornado.resolve<Foo>(Foo.name) instanceof Foo).toBe(true);
@@ -129,7 +171,7 @@ describe("Tornado", () => {
         });
 
         test("multiple raw providers by giving object with token and type", () => {
-            const tornado = Tornado.register([{
+            const tornado = Tornado.register<any>([{
                 token: 'foo',
                 metatype: Foo
             }, {
@@ -146,15 +188,15 @@ describe("Tornado", () => {
     });
 
     it('should return the container size', () => {
-        expect(Tornado.getContainerSize()).toBe(4);
+        expect(Tornado.getContainerSize()).toBe(6);
     });
 
     it('should be able to specify a scoped container to work with', () => {
-        expect(Tornado.getContainerSize()).toBe(4);
+        expect(Tornado.getContainerSize()).toBe(6);
         expect(Tornado.getContainerSize('scoped')).toBe(0);
 
-        Tornado.register([Foo, Bar], 'scoped');
-        expect(Tornado.getContainerSize()).toBe(4);
+        Tornado.register<any>([Foo, Bar], 'scoped');
+        expect(Tornado.getContainerSize()).toBe(6);
         expect(Tornado.getContainerSize('scoped')).toBe(2);
 
         Tornado.clear();

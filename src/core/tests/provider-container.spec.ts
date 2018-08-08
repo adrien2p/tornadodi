@@ -32,7 +32,7 @@ describe("ProviderContainer", () => {
     test('should allow to update a provider', () => {
         let provider = new Provider({ token: 'Foo', metatype: Foo });
 
-        expect(provider.instance).toBe(null);
+        expect(provider.instance).toBe(undefined);
         expect(provider.isResolved).toBe(false);
 
         provider.resolve(container);

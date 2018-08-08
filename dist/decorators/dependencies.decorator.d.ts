@@ -1,2 +1,3 @@
 import 'reflect-metadata';
-export declare const Dependencies: (...tokensOrTypes: (string | (new (...args: any[]) => any))[]) => ClassDecorator;
+import { Metatype } from '../core/types/metatype.type';
+export declare const Dependencies: (...tokensOrTypes: (string | Metatype<any>)[]) => ClassDecorator;
