@@ -46,12 +46,10 @@
     "ts-jest": "^23.0.0",
     "typescript": "^2.9.2"
   },
-  "peerDependencies": {
-    "@types/reflect-metadata": "^0.1.0",
-    "reflect-metadata": "^0.1.12"
-  },
   "dependencies": {
+    "@types/reflect-metadata": "^0.1.0",
     "@types/winston": "^2.3.9",
+    "reflect-metadata": "^0.1.12",
     "winston": "^3.0.0"
   }
 }

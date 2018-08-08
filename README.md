@@ -35,12 +35,6 @@
 
 ## Prerequisites
 
-In order to be able to use `TornadoDI` into your project, you will have to install two libraries.
-
-```text
-npm i reflect-metadata @types/reflect-metadata
-```
-
 If you are working on a javascript project, you have to install few `babel` plugins
 
 ```text
@@ -105,7 +99,10 @@ import { Injectable, Inject } from 'tornadodi';
 
 @Injectable()
 export class Foo { 
-    constructor(private bar: Bar, @Inject('InjectByCustomToken') private soo: Soo) { }
+    constructor(
+        private bar: Bar, 
+        @Inject(Symbol('InjectByCustomToken')) private soo: Soo,
+        @Inject('InjectByCustomToken2) private fii: Fii) { }
 } 
 ```
 
@@ -115,8 +112,7 @@ Only one parameter.
 
 | Parameter type | Example |
 |:---:|:---:|
-| `string` | `'fooToken'` |
-| `Metatype<Foo>` | `Foo` |
+| `any` | `Symbol('fooToken') Or 'fooToken' or a class etc.` |
 
 #### @Dependencies()
 
@@ -144,8 +140,7 @@ Any number of parameter.
 
 | Parameter type | Example |
 |:---:|:---:|
-| `string` | `'fooToken'` |
-| `Metatype<T>` | `Foo` |
+| `any` | `Symbol('fooToken') Or 'fooToken' or a class etc.` |
 
 ### Registering and resolving
 
@@ -179,9 +174,9 @@ const bootstrap = () => {
     // Register multiple class
     Tornado.registerAsSingleton([Foo, Bar]);
     // Register multiple class and use custom token with metatype
-    Tornado.registerAsSingleton([Foo, { token: 't1', metatype: Bar}]);
+    Tornado.registerAsSingleton([Foo, { token: Bar, metatype: Bar}]);
     // Register multiple class and use custom token with static value through useValue
-    Tornado.registerAsSingleton([Foo, { token: 't2', useValue: 42 }]);
+    Tornado.registerAsSingleton([Foo, { token: Symbol('t2'), useValue: 42 }]);
     // Register multiple class and use custom token with factory
     Tornado.registerAsSingleton([Foo, { token: 't3', useFactory: (foo) => foo.method(), inject: [Foo] }]);
 };
@@ -200,9 +195,9 @@ const bootstrap = () => {
     // Register multiple class
     Tornado.registerAsSingleton([Foo, Bar]);
     // Register multiple class and use custom token with metatype
-    Tornado.registerAsSingleton([Foo, { token: 't1', metatype: Bar}]);
+    Tornado.registerAsSingleton([Foo, { token: Bar, metatype: Bar}]);
     // Register multiple class and use custom token with static value through useValue
-    Tornado.registerAsSingleton([Foo, { token: 't2', useValue: 42 }]);
+    Tornado.registerAsSingleton([Foo, { token: Symbol('t2'), useValue: 42 }]);
     // Register multiple class and use custom token with factory
     Tornado.registerAsSingleton([Foo, { token: 't3', useFactory: (foo) => foo.method(), inject: [Foo] }]);
 };
@@ -215,11 +210,11 @@ Only one parameter.
 
 | Parameter type | Example |
 |:---:|:---:|
-| `{ token: string; metatype: Metatype<T> }` | `{ token: 'MyToken', metatype: Foo }` |
-| `{ token: string; useValue: any }` | `{ token: 'MyToken', useValue: 42 }` |
-| `{ token: string; useFactory: (...args: any[]) => any, inject?: any[] }` | `{ token: 'MyToken', useFactory: () => 'value' }` |
+| `{ token: any; metatype: Metatype<T> }` | `{ token: Foo, metatype: Foo }` |
+| `{ token: any; useValue: any }` | `{ token: Symbol('MyToken'), useValue: 42 }` |
+| `{ token: any; useFactory: (...args: any[]) => any, inject?: any[] }` | `{ token: 'MyToken', useFactory: () => 'value' }` |
 | `Metatype<T>` | `Foo` |
-| `Array</* Previous types */>` | `[{ token: 'MyToken', metatype: Foo }, Bar]` |
+| `Array</* Previous types */>` | `[{ token: Foo, metatype: Foo }, Bar]` |
 
 ##### register 
 
@@ -241,9 +236,9 @@ const bootstrap = () => {
     // Register multiple class
     Tornado.register([Foo, Bar]);
     // Register multiple class and use custom token with metatype
-    Tornado.register([Foo, { token: 't1', metatype: Bar}]);
+    Tornado.register([Foo, { token: Bar, metatype: Bar}]);
     // Register multiple class and use custom token with static value through useValue
-    Tornado.register([Foo, { token: 't2', useValue: 42 }]);
+    Tornado.register([Foo, { token: Symbol('t2'), useValue: 42 }]);
     // Register multiple class and use custom token with factory
     Tornado.register([Foo, { token: 't3', useFactory: (foo) => foo.method(), inject: [Foo] }]);
 };
@@ -261,9 +256,9 @@ const bootstrap = () => {
     // Register multiple class
     Tornado.register([Foo, Bar]);
     // Register multiple class and use custom token with metatype
-    Tornado.register([Foo, { token: 't1', metatype: Bar}]);
+    Tornado.register([Foo, { token: Bar, metatype: Bar}]);
     // Register multiple class and use custom token with static value through useValue
-    Tornado.register([Foo, { token: 't2', useValue: 42 }]);
+    Tornado.register([Foo, { token: Symbol('t2'), useValue: 42 }]);
     // Register multiple class and use custom token with factory
     Tornado.register([Foo, { token: 't3', useFactory: (foo) => foo.method(), inject: [Foo] }]);
 };
@@ -276,11 +271,11 @@ Only one parameter.
 
 | Parameter type | Example |
 |:---:|:---:|
-| `{ token: string; metatype: Metatype<T> }` | `{ token: 'MyToken', metatype: Foo }` |
-| `{ token: string; useValue: any }` | `{ token: 'MyToken', useValue: 42 }` |
-| `{ token: string; useFactory: (...args: any[]) => any, inject?: any[] }` | `{ token: 'MyToken', useFactory: () => 'value' }` |
+| `{ token: any; metatype: Metatype<T> }` | `{ token: Foo, metatype: Foo }` |
+| `{ token: any; useValue: any }` | `{ token: Symbol('MyToken'), useValue: 42 }` |
+| `{ token: any; useFactory: (...args: any[]) => any, inject?: any[] }` | `{ token: 'MyToken', useFactory: () => 'value' }` |
 | `Metatype<T>` | `Foo` |
-| `Array</* Previous types */>` | `[{ token: 'MyToken', metatype: Foo }, Bar]` |
+| `Array</* Previous types */>` | `[{ token: Foo, metatype: Foo }, Bar]` |
 
 #### Resolve a class
 
@@ -300,8 +295,10 @@ const bootstrap = () => {
     Tornado.register([Foo, Bar]);
     // Resolve dependency by giving a class to resolve
     const foo = Tornado.resolve<Foo>(Foo);
-    // Resolve dependency by giving a class to resolve
-    const bar = Tornado.resolve<Bar>('barToken');
+    // Resolve dependency by giving a Symbol to resolve
+    const bar = Tornado.resolve<Bar>(Symbol('barToken'));
+    // Resolve dependency by giving a string to resolve
+    const anotherBar = Tornado.resolve<Bar>('barToken');
 };
 bootstrap();
 ```
@@ -316,7 +313,9 @@ const bootstrap = () => {
     // Resolve dependency by giving a class to resolve
     const foo = Tornado.resolve(Foo);
     // Resolve dependency by giving a class to resolve
-    const bar = Tornado.resolve('barToken');
+    const bar = Tornado.resolve(Symbol('barToken'));
+    // Resolve dependency by giving a string to resolve
+    const anotherBar = Tornado.resolve<Bar>('barToken');
 };
 bootstrap();
 ```
@@ -327,8 +326,7 @@ Only one parameter.
 
 | Parameter type | Example |
 |:---:|:---:|
-| `string` | `'fooToken'` |
-| `Metatype<T>` | `Foo` |
+| `any` | `Symbol('fooToken') Or 'fooToken' or a class etc.` |
 
 ### Clear the container
 
@@ -382,14 +380,14 @@ See the following example.
 
 ```typescript
 // Typescript
-Tornado.registerAsSingleton([{ token: 'foo', metatype: Foo }, Bar], 'scoped');
-Tornado.register([{ token: 'foo', metatype: Foo }, Bar], 'scoped');
+Tornado.registerAsSingleton([{ token: Foo, metatype: Foo }, Bar], 'scoped');
+Tornado.register([{ token: Foo, metatype: Foo }, Bar], 'scoped');
 Tornado.resolve<Bar>(Bar, 'scoped')
 ```
 ```javascript
 // Javascript
-Tornado.registerAsSingleton([{ token: 'foo', metatype: Foo }, Bar], 'scoped');
-Tornado.register([{ token: 'foo', metatype: Foo }, Bar], 'scoped');
+Tornado.registerAsSingleton([{ token: Foo, metatype: Foo }, Bar], 'scoped');
+Tornado.register([{ token: Foo, metatype: Foo }, Bar], 'scoped');
 Tornado.resolve(Bar, 'scoped')
 ```
 
