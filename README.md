@@ -25,7 +25,7 @@
     - [@Inject()](#inject)
     - [@Dependencies()](#dependencies)
   - [Registering and resolving](#registering-and-resolving)
-    - [registerAsSingleton](#registerAsSingleton)
+    - [registerAsSingleton](#register-as-singleton)
     - [register](#register)
     - [Resolve a class](#resolve-a-class)
   - [Clear the container](#clear-the-container)
