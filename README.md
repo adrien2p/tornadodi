@@ -1,5 +1,5 @@
 <p align="center">
-  <img atl="TornadoDI" src="./docs/assets/tornadoDI.png"/>
+  <img atl="TornadoDI" src="https://raw.githubusercontent.com/adrien2p/tornadodi/master/docs/assets/tornadoDI.png"/>
 </p>
 
 # TornadoDI :tornado:
@@ -12,7 +12,7 @@
 [![npm version](https://badge.fury.io/js/tornadodi.svg)](https://badge.fury.io/js/tornadodi)
 
 <p align="center">
-  <img atl="TornadoDI-graph" src="./docs/assets/tornadodi-graph.png"/>
+  <img atl="TornadoDI-graph" src="https://raw.githubusercontent.com/adrien2p/tornadodi/master/docs/assets/tornadodi-graph.png"/>
 </p>
 
 ## Table of Contents 
