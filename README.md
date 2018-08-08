@@ -102,7 +102,7 @@ export class Foo {
     constructor(
         private bar: Bar, 
         @Inject(Symbol('InjectByCustomToken')) private soo: Soo,
-        @Inject('InjectByCustomToken2) private fii: Fii) { }
+        @Inject('InjectByCustomToken2') private fii: Fii) { }
 } 
 ```
 
