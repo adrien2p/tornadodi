@@ -25,7 +25,7 @@
     - [@Inject()](#inject)
     - [@Dependencies()](#dependencies)
   - [Registering and resolving](#registering-and-resolving)
-    - [registerAsSingleton](#register-as-singleton)
+    - [registerAsSingleton](#registerassingleton)
     - [register](#register)
     - [Resolve a class](#resolve-a-class)
   - [Clear the container](#clear-the-container)
@@ -175,7 +175,11 @@ import { Tornado } form 'tornadodi';
 
 const bootstrap = () => {
     // Registering the two classes.
+    Tornado.registerAsSingleton<Foo>(Foo);
     Tornado.registerAsSingleton([Foo, Bar]);
+    Tornado.registerAsSingleton([Foo, { token: 't1', metatype: Bar}]);
+    Tornado.registerAsSingleton([Foo, { token: 't2', useValue: 42 }]);
+    Tornado.registerAsSingleton([Foo, { token: 't3', useFactory: (foo) => foo.method(), inject: [Foo] }]);
 };
 bootstrap();
 ```
@@ -187,7 +191,7 @@ const Foo = require('./foo.service');
 const Tornado = require('tornadodi').Tornado
 
 const bootstrap = () => {
-    Tornado.registerAsSingleton<Foo>(Foo);
+    Tornado.registerAsSingleton(Foo);
     Tornado.registerAsSingleton([Foo, Bar]);
     Tornado.registerAsSingleton([Foo, { token: 't1', metatype: Bar}]);
     Tornado.registerAsSingleton([Foo, { token: 't2', useValue: 42 }]);
@@ -239,7 +243,11 @@ const Tornado = require('tornadodi').Tornado
 
 const bootstrap = () => {
     // Registering the two classes.
+    Tornado.register(Foo);
     Tornado.register([Foo, Bar]);
+    Tornado.register([Foo, { token: 't1', metatype: Bar}]);
+    Tornado.register([Foo, { token: 't2', useValue: 42 }]);
+    Tornado.register([Foo, { token: 't3', useFactory: (foo) => foo.method(), inject: [Foo] }]);
 };
 bootstrap();
 ```
