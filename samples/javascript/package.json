@@ -13,13 +13,12 @@
   },
   "license": "MIT",
   "dependencies": {
-    "tornadodi": "^1.1.0"
+    "tornadodi": "^1.2.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.56",
     "@babel/core": "^7.0.0-beta.56",
     "@babel/plugin-proposal-decorators": "^7.0.0-beta.56",
-    "@babel/preset-env": "^7.0.0-beta.56",
-    "reflect-metadata": "^0.1.12"
+    "@babel/preset-env": "^7.0.0-beta.56"
   }
 }
