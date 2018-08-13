@@ -4,32 +4,29 @@
 
 # TornadoDI :tornado:
 
-> TornadoDI provide a modern lite way to deal with dependency injection into your Typescript or javascript project
+> TornadoDI provide a modern lite way to work with dependency injection into your Typescript or javascript project with or without 
+framework
 
 [![Build Status](https://travis-ci.org/adrien2p/tornadodi.svg?branch=master)](https://travis-ci.org/adrien2p/tornadodi)
 [![Coverage Status](https://coveralls.io/repos/github/adrien2p/tornadodi/badge.svg?branch=master)](https://coveralls.io/github/adrien2p/tornadodi?branch=master)
 [![GitHub license](https://img.shields.io/github/license/adrien2p/tornadodi.svg)](https://github.com/adrien2p/tornadodi/blob/master/LICENSE)
 [![npm version](https://badge.fury.io/js/tornadodi.svg)](https://badge.fury.io/js/tornadodi)
 
-<p align="center">
-  <img atl="TornadoDI-graph" src="https://raw.githubusercontent.com/adrien2p/tornadodi/master/docs/assets/tornadodi-graph.png"/>
-</p>
-
 ## Table of Contents 
 
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
-- [Features](#features)
-  - [Decorators](#decorators)
-    - [@Injectable()](#injectable)
-    - [@Inject()](#inject)
-    - [@Dependencies()](#dependencies)
-  - [Registering and resolving](#registering-and-resolving)
-    - [registerAsSingleton](#registerassingleton)
-    - [register](#register)
-    - [Resolve a class](#resolve-a-class)
-  - [Clear the container](#clear-the-container)
-  - [Scoped container](#scoped-container)
+- [API](#api)
+  - [ContainerManager](#containermanager)
+    - [Create](#create)
+    - [Get](#get)
+    - [set](#set)
+  - [Container](#container)
+    - [registerAsClass](#registerAsClass)
+    - [registerAsValue](#registerAsValue)
+    - [registerAsFactory](#registerAsFactory)
+    - [Build](#build)
+    - [Get](#get)
 - [Team](#team)
 - [License](#license)
 
@@ -60,335 +57,108 @@ To use `TornadoDI` you have to install the library first.
 npm i tornadodi
 ```
 
-## Features
-  
-### Decorators
+## API
 
-To free the power of `TornadoDI` some decorators are provided in order to rich the purpose of the dependency injection.
+There is 2 main object into `TornadoDI` which are the `ContainerManager` and the `Container`.
 
-#### @Injectable()
+### ContainerManager
 
-The `@Injectable()` decorator is the more important one, it is through this decorator than `TornadoDI` will
-be able to know about what as to be injected in the class to resolve.
+The `ContainerManager` is there to keep a reference on all the container and allow you to manage them as you want.
+The `ContainerManager` contains a default container which can be use and is accessible by `ContainerManager.get()`.
 
-```typescript
-// Typescript
-import { Injectable } from 'tornadodi';
+#### create
 
-@Injectable()
-export class Foo { } 
-```
-```javascript
-// Javascript
-const Injectable = require('tornadodi').Injectable;
-
-@Injectable()
-class Foo { }
-
-module.exports = Foo;
-```
-
-#### @Inject()
-
-The `@Inject()` decorator will allow you to specify a token or a class to be inject for a specific constructor decorator.
-To specify a token during the registration, refer you to the following section [Register a class](#register-a-class)
+This method will allow you to create a new container identifiable by the token passed in parameter
+and will return the new container as result.
 
 ```typescript
-// Typescript
-import { Injectable, Inject } from 'tornadodi';
-
-@Injectable()
-export class Foo { 
-    constructor(
-        private bar: Bar, 
-        @Inject(Symbol('InjectByCustomToken')) private soo: Soo,
-        @Inject('InjectByCustomToken2') private fii: Fii) { }
-} 
+const myNewContainer = ContainerManager.create(Symbol('myToken'));
 ```
 
-###### Take as parameter
+#### get
 
-Only one parameter.
-
-| Parameter type | Example |
-|:---:|:---:|
-| `any` | `Symbol('fooToken') Or 'fooToken' or a class etc.` |
-
-#### @Dependencies()
-
-In javascript you will not be able to emit `design:paramtypes` metadata from a class. In order to be able to specify the injection
-you can use the `@Dependencies()` decorator which will be able to populate this specific metadata and allow `TornadoDI`
-to deal with the injection.
-
-```javascript
-// Javascript
-const Injectable = require('tornadodi').Injectable;
-const Dependencies = require('tornadodi').Dependencies;
-
-@Injectable()
-@Dependencies('barToken')
-export class Foo { 
-    constructor(bar)
-} 
-
-module.exports = Foo;
-```
-
-###### Take as parameter
-
-Any number of parameter.
-
-| Parameter type | Example |
-|:---:|:---:|
-| `any` | `Symbol('fooToken') Or 'fooToken' or a class etc.` |
-
-### Registering and resolving
-
-During the time you are using `TornadoDI` you will be able to register any classes at any time and resolve them
-when you want. The resolution is made only when it is asked for and never during the registration for performance
-purpose.
-
-#### Register a class
-
-After that you have created your class and used the appropriate decorator (see below), you will be able to register all of them.
-Registering a class does not mean that she's resolved as the same time (We will see how the resolution work in the [Resolve dependencies](#resolve-dependencies) section).
-
-To register a new class or multiple classes you have two possibilities.
-
-##### registerAsSingleton
-
-The `registerAsSingleton` method will provide you a way to explicitly register a class that can be instantiated only once in the 
-whole container. The singleton will be used as well to instantiate other classes with always the same instance if they inject this singleton.
-
-To use this methods see the following example.
+This method allow you to get the container by giving is token. If no token have been provided, the default container
+will be return as result.
 
 ```typescript
-// Typescript
-import Bar from './bar.service';
-import Foo from './foo.service';
-import { Tornado } from 'tornadodi';
-
-const bootstrap = () => {
-    // Register a class
-    Tornado.registerAsSingleton<Foo>(Foo);
-    // Register multiple class
-    Tornado.registerAsSingleton([Foo, Bar]);
-    // Register multiple class and use custom token with metatype
-    Tornado.registerAsSingleton([Foo, { token: Bar, metatype: Bar}]);
-    // Register multiple class and use custom token with static value through useValue
-    Tornado.registerAsSingleton([Foo, { token: Symbol('t2'), useValue: 42 }]);
-    // Register multiple class and use custom token with factory
-    Tornado.registerAsSingleton([Foo, { token: 't3', useFactory: (foo) => foo.method(), inject: [Foo] }]);
-};
-bootstrap();
-```
-```javascript
-
-// Javascript
-const Bar = require('./bar.service');
-const Foo = require('./foo.service');
-const Tornado = require('tornadodi').Tornado;
-
-const bootstrap = () => {
-    // Register a class
-    Tornado.registerAsSingleton(Foo);
-    // Register multiple class
-    Tornado.registerAsSingleton([Foo, Bar]);
-    // Register multiple class and use custom token with metatype
-    Tornado.registerAsSingleton([Foo, { token: Bar, metatype: Bar}]);
-    // Register multiple class and use custom token with static value through useValue
-    Tornado.registerAsSingleton([Foo, { token: Symbol('t2'), useValue: 42 }]);
-    // Register multiple class and use custom token with factory
-    Tornado.registerAsSingleton([Foo, { token: 't3', useFactory: (foo) => foo.method(), inject: [Foo] }]);
-};
-bootstrap();
+const myNewContainer = ContainerManager.get(Symbol('myToken'));
+const myDefaultContainer = ContainerManager.get();
 ```
 
-###### Take as parameter
+#### set
 
-Only one parameter.
-
-| Parameter type | Example |
-|:---:|:---:|
-| `{ token: any; metatype: Metatype<T> }` | `{ token: Foo, metatype: Foo }` |
-| `{ token: any; useValue: any }` | `{ token: Symbol('MyToken'), useValue: 42 }` |
-| `{ token: any; useFactory: (...args: any[]) => any, inject?: any[] }` | `{ token: 'MyToken', useFactory: () => 'value' }` |
-| `Metatype<T>` | `Foo` |
-| `Array</* Previous types */>` | `[{ token: Foo, metatype: Foo }, Bar]` |
-
-##### register 
-
-Otherwise, the `register` method will provide you the possibility to register a class as a non singleton one. In order words,
-each time you will ask to resolve it, you will get a new instance of it and, each time the class is injected, a new instance
-will be used.
-
-To use this methods see the following example.
+This method will allow you to bind a container create outside the container manager to the container manager
+and then keep a reference on it.
 
 ```typescript
-// Typescript
-import Bar from './bar.service';
-import Foo from './foo.service';
-import { Tornado } from 'tornadodi';
-
-const bootstrap = () => {
-    // Register a class
-    Tornado.register<Foo>(Foo);
-    // Register multiple class
-    Tornado.register([Foo, Bar]);
-    // Register multiple class and use custom token with metatype
-    Tornado.register([Foo, { token: Bar, metatype: Bar}]);
-    // Register multiple class and use custom token with static value through useValue
-    Tornado.register([Foo, { token: Symbol('t2'), useValue: 42 }]);
-    // Register multiple class and use custom token with factory
-    Tornado.register([Foo, { token: 't3', useFactory: (foo) => foo.method(), inject: [Foo] }]);
-};
-bootstrap();
-```
-```javascript
-// Javascript
-const Bar = require('./bar.service');
-const Foo = require('./foo.service');
-const Tornado = require('tornadodi').Tornado;
-
-const bootstrap = () => {
-    // Register a class
-    Tornado.register(Foo);
-    // Register multiple class
-    Tornado.register([Foo, Bar]);
-    // Register multiple class and use custom token with metatype
-    Tornado.register([Foo, { token: Bar, metatype: Bar}]);
-    // Register multiple class and use custom token with static value through useValue
-    Tornado.register([Foo, { token: Symbol('t2'), useValue: 42 }]);
-    // Register multiple class and use custom token with factory
-    Tornado.register([Foo, { token: 't3', useFactory: (foo) => foo.method(), inject: [Foo] }]);
-};
-bootstrap();
+const newContainer = new Container('newContainer');
+ContainerManager.set(newContainer);
 ```
 
-###### Take as parameter
 
-Only one parameter.
+### Container
 
-| Parameter type | Example |
-|:---:|:---:|
-| `{ token: any; metatype: Metatype<T> }` | `{ token: Foo, metatype: Foo }` |
-| `{ token: any; useValue: any }` | `{ token: Symbol('MyToken'), useValue: 42 }` |
-| `{ token: any; useFactory: (...args: any[]) => any, inject?: any[] }` | `{ token: 'MyToken', useFactory: () => 'value' }` |
-| `Metatype<T>` | `Foo` |
-| `Array</* Previous types */>` | `[{ token: Foo, metatype: Foo }, Bar]` |
+The ability to create a container for a specific context or separate them as scope is allowed by the access
+to the `Container` object. That mean's that you are not dependent on the `ContainerManager` if that what you need.
 
-#### Resolve a class
+#### registerAsClass
 
-After have been registering the different classes, you will be able to resolve them. The resolution of any classes is made
-when you call the `resolve` method. That means than the dependency resolution is lazy and apply when it requested.
-
-The resolution will resolve the class and it's dependencies, if they are register as singleton the next resolve will return the 
-same instance as the previous one. See the following example.
+This method allow you to register a new class into the container which will be resolved during the build process.
+To register this class, you are able to give the class, a token and a property that let you scoped this provider as a singleton
+or not. The result will be the container itself to be able to chain the registering.
 
 ```typescript
-// Typescript
-import Bar from './bar.service';
-import Foo from './foo.service';
-import { Tornado } from 'tornadodi';
-
-const bootstrap = () => {
-    Tornado.register([Foo, Bar]);
-    // Resolve dependency by giving a class to resolve
-    const foo = Tornado.resolve<Foo>(Foo);
-    // Resolve dependency by giving a Symbol to resolve
-    const bar = Tornado.resolve<Bar>(Symbol('barToken'));
-    // Resolve dependency by giving a string to resolve
-    const anotherBar = Tornado.resolve<Bar>('barToken');
-};
-bootstrap();
-```
-```javascript
-// Javascript
-const Bar = require('./bar.service');
-const Foo = require('./foo.service');
-const Tornado = require('tornadodi').Tornado;
-
-const bootstrap = () => {
-    Tornado.register([Foo, Bar]);
-    // Resolve dependency by giving a class to resolve
-    const foo = Tornado.resolve(Foo);
-    // Resolve dependency by giving a class to resolve
-    const bar = Tornado.resolve(Symbol('barToken'));
-    // Resolve dependency by giving a string to resolve
-    const anotherBar = Tornado.resolve<Bar>('barToken');
-};
-bootstrap();
+myContainer.registerAsClass({ useClass: UserController, token: symbol('userController'), asSingleton: true });
 ```
 
-###### Take as parameter
+#### registerAsFactory
 
-Only one parameter.
+This method allow you to register a new factory into the container which will be resolved during the build process.
+To register this factory, you are able to give the factory, a token and a property that let you scoped this provider as a singleton
+or not. The result will be the container itself to be able to chain the registering.
 
-| Parameter type | Example |
-|:---:|:---:|
-| `any` | `Symbol('fooToken') Or 'fooToken' or a class etc.` |
-
-### Clear the container
-
-`TornadoDI` as it's own container, which is not accessible to the user natively. If you want at any time
-clear all the dependencies registered into the container, you can call the `clear` method as the following example.
+If the factory need to use some dependencies, you can pass them through the inject property by giving an array of tokens.
 
 ```typescript
-// Typescript
-import Bar from './bar.service';
-import Foo from './foo.service';
-import { Tornado } from 'tornadodi';
-
-const bootstrap = () => {
-    Tornado.register([{ token: 'foo', metatype: Foo }, Bar]);
-    const foo = Tornado.resolve<Foo>('foo');
-    const bar = Tornado.resolve<Bar>(Bar);
-    console.log(Tornado.getContainerSize()); // result: 2;
-    
-    // Reset container
-    Tornado.clear();
-    console.log(Tornado.getContainerSize()); // result: 0;
-};
-bootstrap();
-```
-```javascript
-// Javascript
-const Bar = require('./bar.service');
-const Foo = require('./foo.service');
-const Tornado = require('tornadodi').Tornado
-
-const bootstrap = () => {
-    Tornado.register([{ token: 'foo', metatype: Foo }, Bar]);
-    const foo = Tornado.resolve('foo');
-    const bar = Tornado.resolve(Bar);
-    console.log(Tornado.getContainerSize()); // result: 2;
-    
-    // Reset container
-    Tornado.clear();
-    console.log(Tornado.getContainerSize()); // result: 0;
-};
-bootstrap();
+myContainer.registerAsFactory({ 
+    useFactory: async (userService) => {
+        const users = await userService.getAll();
+        return users;
+    }, 
+    inject: [symbol('users')], 
+    token: symbol('myFactory'), 
+    asSingleton: true 
+});
 ```
 
-### Scoped container
+#### registerAsValue
 
-In `TornadoDI` you are able to switch container at any time to work with.
-in every features that we have seen previously in [Features](#registering-and-resolving) from `registering and resolving` section.
-You are able to specify as a second argument, the `scope` that you want to target. It will switch automatically on this
-scoped container to process the action. If there is no specified scope, the default container will be used.
-See the following example.
+This method allow you to register a new static value into the container which will be resolved during the build process.
+To register this static value, you are able to give the value, a token and a property that let you scoped this provider as a singleton
+or not. The result will be the container itself to be able to chain the registering.
 
 ```typescript
-// Typescript
-Tornado.registerAsSingleton([{ token: Foo, metatype: Foo }, Bar], 'scoped');
-Tornado.register([{ token: Foo, metatype: Foo }, Bar], 'scoped');
-Tornado.resolve<Bar>(Bar, 'scoped')
+myContainer.registerAsValue({ useValue: 42, token: symbol('myValue') });
 ```
-```javascript
-// Javascript
-Tornado.registerAsSingleton([{ token: Foo, metatype: Foo }, Bar], 'scoped');
-Tornado.register([{ token: Foo, metatype: Foo }, Bar], 'scoped');
-Tornado.resolve(Bar, 'scoped')
+
+#### build
+
+When all the providers have been registered, you can build the container to resolve all the dependencies.
+You have the possibility to pass a parameter that allow you to force the build process, that can be usefull
+if the build has already been applied or if you add some providers after have been builded the container.
+The result will be the container itself.
+
+```typescript
+await myContainer.build();
+```
+
+#### get
+
+This method allow you to get the resolved value of a specific provider by giving is token. You are
+able to strong types the result by giving the type as template `get<Type>(...)`.
+
+```typescript
+const resolvedValue = myContainer.get<UserController>('userController');
 ```
 
 ## Team

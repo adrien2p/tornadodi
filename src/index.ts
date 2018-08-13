@@ -1,2 +1,2 @@
-export { Injectable, Inject, Dependencies } from './decorators/index';
-export { Tornado } from './core/index';
+export { ContainerManager, Container } from './core';
+export { Dependencies, Inject, Injectable } from './decorators';

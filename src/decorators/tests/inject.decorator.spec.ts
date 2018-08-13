@@ -1,7 +1,7 @@
 import 'reflect-metadata';
+import { Inject } from "../inject.decorator";
 import { Injectable } from "../injectable.decorator";
 import { SELF_PARAMTYPES } from "../../constants/metadata.constant";
-import { Inject } from "../inject.decorator";
 
 describe("Using Inject", () => {
     @Injectable()

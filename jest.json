@@ -14,7 +14,7 @@
   "collectCoverageFrom" : [
     "src/core/*.{js,jsx,tsx,ts}",
     "src/decorators/*.{js,jsx,tsx,ts}",
-    "src/constants/*.{js,jsx,tsx,ts}",
+    "!src/constants/*.{js,jsx,tsx,ts}",
     "!src/core/index.{js,jsx,tsx,ts}",
     "!src/decorators/index.{js,jsx,tsx,ts}",
     "!src/constants/index.{js,jsx,tsx,ts}"

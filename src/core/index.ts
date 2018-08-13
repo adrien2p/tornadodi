@@ -1,3 +1,2 @@
-export { Tornado } from './tornado';
-export { Provider } from './provider';
-export { ProviderContainer } from './provider-container';
+export { ContainerManager } from './container-manager';
+export { Container } from './container';
