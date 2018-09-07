@@ -1,78 +1,32 @@
-import 'reflect-metadata';
-import { CatchError } from '../decorators/catch-error.decorator';
-import { Metatype } from './types/metatype.type';
-import { PARAMTYPES_METADATA, SELF_PARAMTYPES } from '../constants/metadata.constant';
-import { ProviderContainer } from './provider-container';
-import { TokenMetatype } from './interfaces/token-metatype.interface';
-import { TokenUseFactory } from './interfaces/token-useFactory.interface';
-import { TokenUseValue } from './interfaces/token-useValue.interface';
+import { ProviderOptions } from "./interfaces/provider-options.interface";
 
 export class Provider<T> {
-	public token: string;
-	public metatype: new (...args: any[]) => T;
-	public instance: T;
-	public isSingleton: boolean;
-	public useValue: any;
-	public useFactory: (...args: any[]) => any;
-	public inject: any[];
-	private $$resolved: boolean;
+    public isResolved: boolean = false;
+    public resolvedValue: any = null;
 
-	constructor(
-		rawProvider: TokenMetatype<T> | TokenUseValue | TokenUseFactory | Metatype<T>,
-		options?: { isSingleton: boolean }
-	) {
-		this.token = typeof rawProvider === 'object' ? (<any>rawProvider).token : rawProvider;
-		this.metatype = typeof rawProvider === 'function' ? rawProvider : (<any>rawProvider).metatype;
-		this.useValue = (<any>rawProvider).useValue;
-		this.useFactory = (<any>rawProvider).useFactory;
-		this.inject = (<any>rawProvider).inject || [];
+    private $$asSingleton: boolean;
+    private $$inject: any[];
+    private $$token: any;
+    private $$useClass?: (new (...args: any[]) => T);
+    private $$useFactory?: (...args: any[]) => any;
+    private $$useValue?: any ;
 
-		this.instance = undefined;
-		this.$$resolved = false;
-		this.isSingleton = options ? options.isSingleton : false;
-	}
+    get asSingleton(): boolean { return this.$$asSingleton; }
+    get inject(): any { return this.$$inject; }
+    get token(): any { return this.$$token; }
+    get useClass(): (new (...args: any[]) => T) { return this.$$useClass; }
+    get useFactory(): any { return this.$$useFactory; }
+    get useValue(): any { return this.$$useValue; }
 
-	get isResolved(): boolean {
-		return this.$$resolved;
-	}
+    constructor(options: ProviderOptions<T>) {
+        this.$$useValue = options.useValue;
+        this.$$useClass = options.useClass || null;
+        this.$$useFactory = options.useFactory || null;
+        this.$$asSingleton = options.asSingleton || false;
+        this.$$token = options.token;
+        this.$$inject = options.inject || [];
 
-	@CatchError()
-	public resolve(providerContainer: ProviderContainer): Provider<T> {
-		if (this.$$resolved && this.isSingleton) return providerContainer.get(this.token);
-
-		if (this.metatype) {
-			const params = Reflect.getMetadata(PARAMTYPES_METADATA, this.metatype) || [];
-			const injectedParams = Reflect.getMetadata(SELF_PARAMTYPES, this.metatype) || [];
-			if (!params.length) {
-				this.instance = new this.metatype();
-			} else {
-				/* Override params with injected params at the specific index. */
-				injectedParams.map(
-					(p: { index: number; token: string | Metatype<any> }) => (params[p.index] = p.token)
-				);
-				const resolvedArgs = this.resolveArgs(params, providerContainer);
-				this.instance = new this.metatype(...resolvedArgs);
-			}
-		} else if (this.useValue) {
-			this.instance = this.useValue;
-		} else if (this.useFactory) {
-			const resolvedArgs = this.resolveArgs(this.inject, providerContainer);
-			this.instance = this.useFactory(...resolvedArgs);
-		} else {
-			throw new Error(`Unable to resolve the provider with token "${this.token}"`);
-		}
-
-		this.$$resolved = true;
-		providerContainer.updateProvider(this);
-		return this;
-	}
-
-	private resolveArgs(args: any[], providerContainer: ProviderContainer): any[] {
-		return args.map((token: any) => {
-			const provider = providerContainer.get(token);
-			return provider.$$resolved && provider.isSingleton
-				? provider.instance
-				: provider.resolve(providerContainer).instance;
-		});
-	}
+        this.resolvedValue = options.useValue || null;
+        this.isResolved = !!options.useValue;
+    }
 }
